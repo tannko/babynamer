@@ -1,0 +1,17 @@
+{
+  "user": "user_login",
+  "shortlists" : [
+    {
+      "name" : "shortlist1",
+      "isShared" : "false"
+      "data" : [
+        {"name": "name1", "rating" : 5},
+        {"name": "name2", "rating" : 4},
+        {"name": "name3", "rating" : 3},
+        {"name": "name4", "rating" : 3},
+      ]
+    },
+    {},
+    {}
+  ]
+}
