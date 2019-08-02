@@ -155,7 +155,7 @@ router.post('/saveList', (req, res) => {
     }
 
     const owner = {
-      id: user._id,
+      user: user._id,
       name: user.name
     };
 
@@ -206,32 +206,48 @@ router.post('/rename', (req, res) => {
 
 router.post('/remove', (req, res) => {
   const id = req.body.id;
-  Shortlist.deleteOne({ _id: id }, (err, removeres) => {
+  Shortlist.deleteOne({ _id: id }, (err, res) => {
     if (err) {
       console.log('remove list error:' + err);
       res.status(400).send('remove list error');
     }
-    console.log('deleted: ' + removeres.deletedCount);
+    console.log('removed: ' + res.deletedCount);
     res.status(200).send('removed');
   });
 });
 
 router.post('/share', (req, res) => {
+  const email = req.body.email;
   const id = req.body.id;
-  const shareWith = req.body.shareWith;
-  Shortlist.updateOne({ _id: id }, { shareWith: shareWith }, (err, updres) => {
+  User.findOne({ email: email }, ( err, user ) => {
     if (err) {
-      console.log('share list error: ' + err);
-      res.status(400).send('share list error');
+      console.log('error looking for user with email ' + email);
+      res.status(400).send('error looking for user with email ' + email);
     }
-    console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-    res.status(200).send('shared');
+
+    if (!user) {
+      console.log('user with email ' + email + ' is not found');
+      res.status(400).send('user with email ' + email + ' is not found');
+    }
+
+    const sharedWith = {
+      user: user._id,
+      status: 0
+    };
+    Shortlist.updateOne({ _id: id }, { sharedWith: sharedWith }, (err, updres) => {
+      if (err) {
+        console.log('share list error: ' + err);
+        res.status(400).send('share list error');
+      }
+      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+      res.status(200).send('shared');
+    });
   });
 });
 
 router.post('/unshare', (req, res) => {
   const id = req.body.id;
-  Shortlist.updateOne({ _id: id }, { shareWith: null }, (err, updres) => {
+  Shortlist.updateOne({ _id: id }, { sharedWith: null }, (err, updres) => {
     if (err) {
       console.log('unshare list error: ' + err);
       res.status(400).send('unshare list error');
@@ -242,8 +258,9 @@ router.post('/unshare', (req, res) => {
 });
 
 router.post('/accept', (req, res) => {
-  const id = req.body.id;
-  Shortlist.updateOne({ _id: id }, { shareWith.status: 1 }, (err, updres) => {
+  const listId = req.body.id;
+  console.log('user' + req.body.user + ' accepts list ' + listId);
+  Shortlist.updateOne({ _id: listId }, { 'sharedWith.status': 1 }, (err, updres) => {
     if (err) {
       console.log('accept list error: ' + err);
       res.status(400).send('accept list error');
@@ -255,7 +272,8 @@ router.post('/accept', (req, res) => {
 
 router.get('/lists/:id', (req, res) => {
   const userId = req.params.id;
-  Shortlist.find({ owner.id: userId }, (err, data) => {
+  console.log('userId: ' + userId);
+  Shortlist.find({ 'owner.user': userId }, (err, data) => {
     if (err) {
       console.log('list searching error');
       res.status(400).send('lists searching error');
@@ -267,7 +285,8 @@ router.get('/lists/:id', (req, res) => {
 
 router.get('/shared/:id', (req, res) => {
   const userId = req.params.id;
-  Shortlist.find({ sharedWith.user: userId }, (err, data) => {
+  console.log('shared with ' + userId);
+  Shortlist.find({ 'sharedWith.user': userId }, (err, data) => {
     if (err) {
       console.log('shared lists searching error');
       res.status(400).send('shared lists searching error');

@@ -12,11 +12,12 @@ class SharedWithMe extends React.Component {
       sharedLists: [],
       timestamp: 0
     };
+    this.rerender = this.rerender.bind(this);
   }
 
   componentDidMount() {
     const user = getUser();
-    axios.get('http://localhost:3003/shared/' + user._id)
+    axios.get('http://localhost:3003/api/shared/' + user._id)
       .then( response => {
         this.setState({ sharedLists: response.data });
       })

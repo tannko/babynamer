@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { MDBContainer, MDBInput, MDBBtn } from 'mdbreact';
 import { MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } from 'mdbreact';
 
@@ -15,7 +16,7 @@ class ShareModal extends React.Component {
   }
 
   handleSaveClick() {
-    
+    this.props.share(this.state.email);
   }
 
   render() {

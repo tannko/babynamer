@@ -27,6 +27,7 @@ class ModalList extends React.Component {
     this.handleRenameClick = this.handleRenameClick.bind(this);
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.shareList = this.shareList.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +85,21 @@ class ModalList extends React.Component {
       });
   }
 
+  shareList(email) {
+    const params = {
+      id: this.props.shortlist._id,
+      email: email
+    };
+    axios.post('http://localhost:3003/api/share', params)
+      .then( response => {
+
+      })
+      .catch( error => {
+
+      });
+
+  }
+
   render() {
     const shortlist = this.props.shortlist;
     return(
@@ -106,7 +122,7 @@ class ModalList extends React.Component {
             <MDBBtn color="primary" onClick={this.handleSaveClick}>Save</MDBBtn>
           </MDBModalFooter>
         </MDBModal>
-        <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} />
+        <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.shareList} />
         <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} />
         <RemoveModal toggle={this.handleRemoveClick} modal={this.state.removeModal} listname={shortlist.name} />
         <a href="#" onClick={this.toggle}>

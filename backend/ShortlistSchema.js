@@ -18,7 +18,7 @@ const SharedSchema = new Schema (
 );
 const OwnerSchema = new Schema (
   {
-    id: ObjectId,
+    user: ObjectId,
     name: String
   }
 );
@@ -27,7 +27,7 @@ const ShortlistSchema = new Schema (
     name: String,
     //isShared: Boolean,
     list: [NameRatingSchema],
-    owner: OwnerSchema
+    owner: OwnerSchema,
     sharedWith: SharedSchema
   }
 );

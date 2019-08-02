@@ -66,7 +66,8 @@ class App extends Component {
     } else if (isGenderSet && isNameListOver) {
       currentView = <ShortList list={this.state.chosenNames}
                                name={this.state.listname}
-                               updateRating={this.updateRating}/>;
+                               updateRating={this.updateRating}
+                               updateListname={this.updateListname}/>;
     }
 
     return(

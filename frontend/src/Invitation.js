@@ -13,7 +13,7 @@ class Invitation extends React.Component {
 
   handleDeclineClick() {
     const user = getUser();
-    axios.post('http://localhost:3003/unshare', this.props.list._id)
+    axios.post('http://localhost:3003/api/unshare', { id: this.props.list._id })
       .then( response => {
         // update state to re-render component
         this.props.rerender();
@@ -25,7 +25,11 @@ class Invitation extends React.Component {
 
   handleAcceptClick() {
     const user = getUser();
-    axios.post('http://localhost:3003/accept', this.props.list._id)
+    const params = {
+      id: this.props.list._id,
+      user: user._id
+    };
+    axios.post('http://localhost:3003/api/accept', params)
       .then( response => {
         // update state to re-render component
         this.props.rerender();
@@ -43,8 +47,8 @@ class Invitation extends React.Component {
           <MDBCardBody>
             <MDBCardTitle>{list.name}</MDBCardTitle>
             <MDBCardText>User {list.owner.name} wants to share with you this list</MDBCardText>
-            <MDBBtn color="secondary" onClick="handleDeclineClick">Decline</MDBBtn>
-            <MDBBtn color="primary" onClick="handleAcceptClick">Accept</MDBBtn>
+            <MDBBtn color="secondary" onClick={this.handleDeclineClick}>Decline</MDBBtn>
+            <MDBBtn color="primary" onClick={this.handleAcceptClick}>Accept</MDBBtn>
           </MDBCardBody>
         </MDBCard>
       </MDBCol>
