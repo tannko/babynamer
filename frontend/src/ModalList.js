@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { MDBContainer, MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } from 'mdbreact';
 import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from 'mdbreact';
-import { MDBBtn, MDBRow, MDBIcon } from 'mdbreact';
+import { MDBBtn, MDBRow, MDBIcon, MDBCardHeader, MDBBadge } from 'mdbreact';
 import { MDBDropdown, MDBDropdownMenu, MDBDropdownItem, MDBDropdownToggle } from 'mdbreact';
 import ShortList from './ShortList';
 import ShortlistBody from './ShortlistBody';
@@ -48,7 +48,6 @@ class ModalList extends React.Component {
     const shortlist = {
       _id: this.props.shortlist._id,
       name: this.props.shortlist.name,
-      //isShared: this.props.shortlist.isShared,
       list: list,
       sharedWith: this.props.shortlist.sharedWith
     };
@@ -103,7 +102,9 @@ class ModalList extends React.Component {
 
   render() {
     const shortlist = this.props.shortlist;
-    return(
+    const isShared = shortlist.sharedWith == null ? false : true;
+
+    return (
       <MDBContainer>
 
         <MDBModal isOpen={this.state.modal} toggle={this.toggle} backdrop={false}>
@@ -126,9 +127,26 @@ class ModalList extends React.Component {
         <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.shareList} />
         <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} />
         <RemoveModal toggle={this.handleRemoveClick} modal={this.state.removeModal} listname={shortlist.name} />
+
         <a href="#" onClick={this.toggle}>
         <MDBCard className="mt-3">
-          <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" />
+
+          { isShared &&
+          <MDBCardHeader>
+
+            <div className="d-flex justify-content-end">
+
+              <MDBBadge color="default">
+                <MDBIcon icon="envelope-open-text" size="2x" />
+              </MDBBadge>
+              
+              <MDBBadge color="warning">
+                <MDBIcon icon="share-alt" size="2x" />
+              </MDBBadge>
+            </div>
+        </MDBCardHeader> }
+
+          <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"/>
             <MDBCardBody>
               <MDBCardTitle>{shortlist.name}</MDBCardTitle>
               <MDBCardText> timestamp </MDBCardText>

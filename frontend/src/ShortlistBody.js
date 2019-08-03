@@ -44,6 +44,7 @@ class ShortlistBody extends React.Component {
       this.props.list.forEach((item) => {
         rows.push(<ShortListRow name={item.babyname.name}
                                 rating={item.rating}
+                                ratingFromShare={item.ratingFromShare}
                                 starClick={this.handleStarClick}/>);
       });
     }
@@ -70,7 +71,8 @@ class ShortListRow extends React.Component {
   render() {
     const name = this.props.name;
     const rating = this.props.rating;
-
+    const ratingFromShare = this.props.ratingFromShare;
+    const commonRating = ratingFromShare == 0 ? "" : ratingFromShare + rating;
     return(
       <tr>
         <td>{name}</td>
@@ -81,6 +83,7 @@ class ShortListRow extends React.Component {
               value={rating}
               onStarClick={this.onStarClick}/>
         </td>
+        <td>{commonRating}</td>
       </tr>
     );
   }
