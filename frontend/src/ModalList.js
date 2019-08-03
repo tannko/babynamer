@@ -46,6 +46,7 @@ class ModalList extends React.Component {
 
   updateRating(list) {
     const shortlist = {
+      _id: this.props.shortlist._id,
       name: this.props.shortlist.name,
       //isShared: this.props.shortlist.isShared,
       list: list,
@@ -115,7 +116,7 @@ class ModalList extends React.Component {
                             remove={this.handleRemoveClick} />
             </div>
 
-            <ShortlistBody list={shortlist.list} updateRating={this.updateRating}></ShortlistBody>
+            <ShortlistBody list={shortlist.list} updateRating={this.updateRating} shared={this.props.shared}></ShortlistBody>
           </MDBModalBody>
           <MDBModalFooter>
             <MDBBtn color="secondary" onClick={this.toggle}>Cancel</MDBBtn>

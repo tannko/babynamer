@@ -28,7 +28,7 @@ class MyLists extends React.Component {
   updateRating(list) {
     const updatedLists = JSON.parse(JSON.stringify(this.state.lists));
     for (var item of updatedLists) {
-      if (item.name === list.name) { // what if we have two lists with the same name??
+      if (item._id === list._id) { // what if we have two lists with the same name??
         updatedLists[updatedLists.indexOf(item)] = list;
         break;
       }
@@ -46,7 +46,7 @@ class MyLists extends React.Component {
     this.state.lists.forEach( list => {
       rows.push(
         <MDBCol>
-          <ModalList shortlist={list} updateRating={this.updateRating}/>
+          <ModalList shortlist={list} updateRating={this.updateRating} shared={false}/>
         </MDBCol>
       );
     });
