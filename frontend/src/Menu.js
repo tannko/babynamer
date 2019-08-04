@@ -2,6 +2,7 @@ import React from 'react';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle } from 'mdbreact';
 import { MDBCardText, MDBCol, MDBRow, MDBContainer, MDBJumbotron } from 'mdbreact';
 import { getUserName, logout } from './utils';
+import Navbar from './Navbar';
 
 class Menu extends React.Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class Menu extends React.Component {
       <MDBContainer className="mt-5 text-center">
         <MDBRow>
           <MDBCol>
-            <MDBBtn className="float-right" onClick={this.handleLogoutClick}>Logout</MDBBtn>
+            <Navbar activeItem="home"/>
           </MDBCol>
         </MDBRow>
         <MDBRow>

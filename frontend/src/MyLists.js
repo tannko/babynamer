@@ -6,6 +6,7 @@ import { MDBCardImage } from 'mdbreact';
 import { getUser } from './utils';
 import ShortList from './ShortList';
 import ModalList from './ModalList';
+import Navbar from './Navbar';
 
 class MyLists extends React.Component {
   constructor(props) {
@@ -52,6 +53,7 @@ class MyLists extends React.Component {
     });
     return(
       <MDBContainer className="min-vh-100 align-items-center justify-content-center">
+        <Navbar activeItem="lists"/>
         <div className="card-deck">
           {rows}
         </div>

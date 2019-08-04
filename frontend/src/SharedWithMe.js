@@ -5,6 +5,7 @@ import { MDBContainer, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, 
 import { MDBCardFooter, MDBCardHeader, MDBCardImage } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
+import Navbar from './Navbar';
 
 class SharedWithMe extends React.Component {
   constructor(props) {
@@ -74,6 +75,7 @@ class SharedWithMe extends React.Component {
     });
     return (
       <MDBContainer>
+        <Navbar activeItem="shared"/>
         <div class="card-deck">
           {rows}
         </div>
