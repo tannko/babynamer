@@ -10,6 +10,7 @@ import ShareModal from './ShareModal';
 import RenameModal from './RenameModal';
 import RemoveModal from './RemoveModal';
 import DropdownMenu from './DropdownMenu';
+import UnshareModal from './UnshareModal';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -28,20 +29,24 @@ class ModalList extends React.Component {
     this.handleRenameClick = this.handleRenameClick.bind(this);
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
+    this.handleUnshareClick = this.handleUnshareClick.bind(this);
     this.shareList = this.shareList.bind(this);
+    this.unshare = this.unshare.bind(this);
   }
 
   componentDidMount() {
     this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
     // TO DO
-    const sharedId = this.props.shortlist.sharedWith.user;
-    axios.get('http://localhost:3003/api/user/' + sharedId)
-      .then( response => {
-        this.setState({ sharedWithUser: response.data });
-      })
-      .catch( error => {
+    if (this.props.shortlist.sharedWith != null) {
+      const sharedId = this.props.shortlist.sharedWith.user;
+      axios.get('http://localhost:3003/api/user/' + sharedId)
+        .then( response => {
+          this.setState({ sharedWithUser: response.data });
+        })
+        .catch( error => {
 
-      });
+        });
+    }
   }
 
   toggle = () => {
@@ -68,6 +73,12 @@ class ModalList extends React.Component {
     // show share modal
     this.setState({
       shareModal: !this.state.shareModal
+    });
+  }
+
+  handleUnshareClick() {
+    this.setState({
+      unshareModal: !this.state.unshareModal
     });
   }
 
@@ -107,7 +118,19 @@ class ModalList extends React.Component {
       .catch( error => {
 
       });
+  }
 
+  unshare() {
+    const params = {
+      id: this.props.shortlist._id
+    };
+    axios.post('http://localhost:3003/api/unshare', params)
+      .then( response => {
+
+      })
+      .catch( error => {
+
+      });
   }
 
   render() {
@@ -118,10 +141,11 @@ class ModalList extends React.Component {
     const upperDiv = !this.props.shared ?
             <div className="d-flex mb-3">
               { sharedMessage }
-              <div>
-                <DropdownMenu share={this.handleShareClick}
+              <div className="ml-auto">
+                <DropdownMenu share={ isShared ? this.handleUnshareClick : this.handleShareClick }
                     rename={this.handleRenameClick}
-                    remove={this.handleRemoveClick} />
+                    remove={this.handleRemoveClick}
+                    isShared={isShared} />
                 </div></div> :
               <div></div>;
 
@@ -142,6 +166,10 @@ class ModalList extends React.Component {
         <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.shareList} />
         <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} />
         <RemoveModal toggle={this.handleRemoveClick} modal={this.state.removeModal} listname={shortlist.name} />
+        <UnshareModal toggle={this.handleUnshareClick}
+                      modal={this.state.unshareModal}
+                      sharedWithUser={this.state.sharedWithUser}
+                      unshare={this.unshare}/>
 
         <a href="#" onClick={this.toggle}>
         <MDBCard className="mt-3">

@@ -7,12 +7,13 @@ class DropdownMenu extends React.Component {
   }
 
   render() {
+    const buttonLabel = this.props.isShared ? "Unshare" : "Share";
     return (
       <MDBDropdown>
         <MDBDropdownToggle color="primary"><MDBIcon icon="bars" /></MDBDropdownToggle>
         <MDBDropdownMenu basic>
           <MDBDropdownItem onClick={this.props.share}>
-            <MDBIcon icon="share-alt" /> Share
+            <MDBIcon icon="share-alt" /> { buttonLabel }
             </MDBDropdownItem>
           <MDBDropdownItem onClick={this.props.rename}>
             <MDBIcon icon="pencil-alt" /> Rename
