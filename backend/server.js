@@ -294,7 +294,19 @@ router.get('/shared/:id', (req, res) => {
     console.log('shared lists found: ' + data.length);
     res.send(data);
   });
-})
+});
+
+router.get('/user/:id', (req, res) => {
+  const id = req.params.id;
+  User.findOne({ _id: id }, (err, user) => {
+    if (err) {
+      console.log('error finding user');
+      res.status(400).send('error finding user');
+    }
+    console.log('user found');
+    res.send(user);
+  });
+});
 
 // append /api for our http requests
 app.use('/api', router);

@@ -19,7 +19,8 @@ class ModalList extends React.Component {
       shareModal: false,
       renameModal: false,
       removeModal: false,
-      initialList: []
+      initialList: [],
+      sharedWithUser: null
     }
     this.toggle = this.toggle.bind(this);
     this.updateRating = this.updateRating.bind(this);
@@ -33,7 +34,14 @@ class ModalList extends React.Component {
   componentDidMount() {
     this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
     // TO DO
-    // add info about user from shareWith
+    const sharedId = this.props.shortlist.sharedWith.user;
+    axios.get('http://localhost:3003/api/user/' + sharedId)
+      .then( response => {
+        this.setState({ sharedWithUser: response.data });
+      })
+      .catch( error => {
+
+      });
   }
 
   toggle = () => {
@@ -105,10 +113,11 @@ class ModalList extends React.Component {
   render() {
     const shortlist = this.props.shortlist;
     const isShared = shortlist.sharedWith == null ? false : true;
-    const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + shortlist.sharedWith.objectId }</div> : "";
+    const sharedWithName = this.state.sharedWithUser == null ? "" : this.state.sharedWithUser.name;
+    const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + sharedWithName }</div> : "";
     const upperDiv = !this.props.shared ?
             <div className="d-flex mb-3">
-              {sharedMessage}
+              { sharedMessage }
               <div>
                 <DropdownMenu share={this.handleShareClick}
                     rename={this.handleRenameClick}
