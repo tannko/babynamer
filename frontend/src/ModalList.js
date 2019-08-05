@@ -32,6 +32,8 @@ class ModalList extends React.Component {
 
   componentDidMount() {
     this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
+    // TO DO
+    // add info about user from shareWith
   }
 
   toggle = () => {
@@ -103,6 +105,16 @@ class ModalList extends React.Component {
   render() {
     const shortlist = this.props.shortlist;
     const isShared = shortlist.sharedWith == null ? false : true;
+    const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + shortlist.sharedWith.objectId }</div> : "";
+    const upperDiv = !this.props.shared ?
+            <div className="d-flex mb-3">
+              {sharedMessage}
+              <div>
+                <DropdownMenu share={this.handleShareClick}
+                    rename={this.handleRenameClick}
+                    remove={this.handleRemoveClick} />
+                </div></div> :
+              <div></div>;
 
     return (
       <MDBContainer>
@@ -110,13 +122,7 @@ class ModalList extends React.Component {
         <MDBModal isOpen={this.state.modal} toggle={this.toggle} backdrop={false}>
           <MDBModalHeader toggle={this.toggle}>{shortlist.name}</MDBModalHeader>
           <MDBModalBody>
-
-            <div className="d-flex justify-content-end">
-              <DropdownMenu share={this.handleShareClick}
-                            rename={this.handleRenameClick}
-                            remove={this.handleRemoveClick} />
-            </div>
-
+            {upperDiv}
             <ShortlistBody list={shortlist.list} updateRating={this.updateRating} shared={this.props.shared}></ShortlistBody>
           </MDBModalBody>
           <MDBModalFooter>
@@ -139,7 +145,7 @@ class ModalList extends React.Component {
               <MDBBadge color="default">
                 <MDBIcon icon="envelope-open-text" size="2x" />
               </MDBBadge>
-              
+
               <MDBBadge color="warning">
                 <MDBIcon icon="share-alt" size="2x" />
               </MDBBadge>
