@@ -11,6 +11,7 @@ import RenameModal from './RenameModal';
 import RemoveModal from './RemoveModal';
 import DropdownMenu from './DropdownMenu';
 import UnshareModal from './UnshareModal';
+import { socket } from './socket_api';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -21,7 +22,8 @@ class ModalList extends React.Component {
       renameModal: false,
       removeModal: false,
       initialList: [],
-      sharedWithUser: null
+      sharedWithUser: null,
+      isUpdated: false
     }
     this.toggle = this.toggle.bind(this);
     this.updateRating = this.updateRating.bind(this);
@@ -32,9 +34,11 @@ class ModalList extends React.Component {
     this.handleUnshareClick = this.handleUnshareClick.bind(this);
     this.shareList = this.shareList.bind(this);
     this.unshare = this.unshare.bind(this);
+    this.setUpdateIcon = this.setUpdateIcon.bind(this);
   }
 
   componentDidMount() {
+
     this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
     // TO DO
     if (this.props.shortlist.sharedWith != null) {
@@ -47,11 +51,21 @@ class ModalList extends React.Component {
 
         });
     }
+
+    socket.on('listIsUpdated', this.setUpdateIcon);
+  }
+
+  setUpdateIcon(updatedId) {
+    if (this.props.shortlist._id == updatedId) {
+      this.setState({ isUpdated: true });
+    }
   }
 
   toggle = () => {
     if (this.state.modal) {
       this.updateRating(this.state.initialList);
+    } else {
+      this.setState({ isUpdated: false });
     }
 
     this.setState({
@@ -96,6 +110,9 @@ class ModalList extends React.Component {
 
   handleSaveClick() {
     // update shortlist
+    if (this.props.shared) {
+      socket.emit("saveDataFromShared", this.props.shortlist);
+    } else {
     axios.post('http://localhost:3003/api/updateList',
       { shortlist: this.props.shortlist })
       .then( res => {
@@ -104,6 +121,7 @@ class ModalList extends React.Component {
       .catch( err => {
         // show modal about error
       });
+    }
   }
 
   shareList(email) {
@@ -136,6 +154,7 @@ class ModalList extends React.Component {
   render() {
     const shortlist = this.props.shortlist;
     const isShared = shortlist.sharedWith == null ? false : true;
+    const isUpdated = this.state.isUpdated;
     const sharedWithName = this.state.sharedWithUser == null ? "" : this.state.sharedWithUser.name;
     const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + sharedWithName }</div> : "";
     const upperDiv = !this.props.shared ?
@@ -178,11 +197,11 @@ class ModalList extends React.Component {
           <MDBCardHeader>
 
             <div className="d-flex justify-content-end">
-
+              { isUpdated &&
               <MDBBadge color="default">
                 <MDBIcon icon="envelope-open-text" size="2x" />
               </MDBBadge>
-
+              }
               <MDBBadge color="warning">
                 <MDBIcon icon="share-alt" size="2x" />
               </MDBBadge>

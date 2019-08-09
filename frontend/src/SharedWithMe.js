@@ -7,6 +7,7 @@ import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
 
+
 class SharedWithMe extends React.Component {
   constructor(props) {
     super(props);
@@ -67,7 +68,7 @@ class SharedWithMe extends React.Component {
         );
       } else {
         rows.push(
-          <MDBCol>
+          <MDBCol md="4">
             <ModalList shortlist={list} updateRating={this.updateRating} shared={true}/>
           </MDBCol>
         );

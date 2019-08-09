@@ -7,12 +7,14 @@ import { getUser } from './utils';
 import ShortList from './ShortList';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
+import { socket } from './socket_api';
 
 class MyLists extends React.Component {
   constructor(props) {
     super(props);
     this.state = { lists: [] };
     this.updateRating = this.updateRating.bind(this);
+    //this.updateInfo = this.updateInfo.bind(this);
   }
 
   componentDidMount() {
@@ -24,8 +26,22 @@ class MyLists extends React.Component {
       .catch( error => {
 
       });
+    //socket.on("updatedInfoFromShared", this.updateInfo);
   }
+/*
+  updateInfo(owner) {
+    const user = getUser();
+    if (owner._id == user._id) {
+      axios.get('http://localhost:3003/api/lists/' + user._id)
+        .then( response => {
+          this.setState({ lists: response.data });
+        })
+        .catch( error => {
 
+        });
+    }
+  }
+*/
   updateRating(list) {
     const updatedLists = JSON.parse(JSON.stringify(this.state.lists));
     for (var item of updatedLists) {
@@ -46,8 +62,8 @@ class MyLists extends React.Component {
     const ratingLabel = this.state.ratingLabel;
     this.state.lists.forEach( list => {
       rows.push(
-        <MDBCol>
-          <ModalList shortlist={list} updateRating={this.updateRating} shared={false}/>
+        <MDBCol md="4">
+          <ModalList shortlist={list} updateRating={this.updateRating} shared={false} />
         </MDBCol>
       );
     });

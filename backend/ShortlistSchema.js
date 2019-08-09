@@ -25,7 +25,6 @@ const OwnerSchema = new Schema (
 const ShortlistSchema = new Schema (
   {
     name: String,
-    //isShared: Boolean,
     list: [NameRatingSchema],
     owner: OwnerSchema,
     sharedWith: SharedSchema

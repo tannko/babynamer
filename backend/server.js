@@ -10,8 +10,11 @@ const {User, validate} = require('./UserSchema');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const socketIO = require('socket.io');
+const http = require('http');
 
 const API_PORT = 3003;
+
 const app = express();
 app.use(cors());
 const router = express.Router();
@@ -312,4 +315,20 @@ router.get('/user/:id', (req, res) => {
 app.use('/api', router);
 
 // launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+//app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+
+const server = http.createServer(app);
+const io = socketIO(server);
+io.on('connection', socket => {
+  socket.on("saveDataFromShared", shortlist => {
+    Shortlist.updateOne({ _id: shortlist._id }, shortlist, (err, updres) => {
+      if (err) {
+        console.log('update list error: ' + err);
+        //emit error event?
+      }
+      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+      io.sockets.emit("listIsUpdated", shortlist._id);
+    });
+  });
+});
+server.listen(API_PORT);
