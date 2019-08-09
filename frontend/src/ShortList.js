@@ -23,22 +23,23 @@ class ShortList extends React.Component {
   saveClick() {
     const shortlist = {
       name: this.props.name,
-      namesRatings: this.props.list,
-      sharedWith: null
+      status: 0,
+      partner: null
     };
     const dataToSave = {
       user: getUser(),
-      list: shortlist
+      shortlist: shortlist,
+      nameRatingList: this.props.list
     };
 
     axios.post('http://localhost:3003/api/saveList', dataToSave)
       .then(res => {
         // TO DO
-        // show modal window with text:
-        // shortlist successfully saved
-        //console.log(res.data);
+        // move to my lists page
+        this.props.history.push('/lists');
       })
       .catch(err => {
+        // show modal about error with saving
         console.log(err);
        });
 
@@ -50,22 +51,18 @@ class ShortList extends React.Component {
   }
 
   starClick(nextValue, prevValue, name) {
-    const list = JSON.parse(JSON.stringify(this.props.list));
-    for (var item of list) {
-      if (item.babyname.name === name) {
-        item.rating = nextValue;
-        break;
-      }
-    }
-    this.props.updateRating(list); //(name, nextValue);
+    const list = new Map(this.props.list);
+    list.set(name, nextValue);
+    this.props.updateRating(list);
   }
 
   render() {
     const title = this.props.name;
     const rows = [];
 
-    this.props.list.forEach((item) => {
-      rows.push(<ShortListRow name={item.babyname.name} rating={item.rating}
+    // value, key
+    this.props.list.forEach((rating, name) => {
+      rows.push(<ShortListRow name={name} rating={rating}
         starClick={this.starClick}/>);
     });
 

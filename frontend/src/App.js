@@ -6,7 +6,7 @@ import ShortList from './ShortList';
 class App extends Component {
   constructor() {
     super();
-    this.state = {gender: '', isNameListOver: false, chosenNames: [], listname: "My Shortlist"};
+    this.state = {gender: '', isNameListOver: false, chosenNames: new Map([]), listname: "My Shortlist"};
     this.genderClick = this.genderClick.bind(this);
     this.backClick = this.backClick.bind(this);
     this.endNameSorted = this.endNameSorted.bind(this);
@@ -28,19 +28,11 @@ class App extends Component {
   }
 
   updateChosenNames(chosenNames) {
-    this.setState({chosenNames: chosenNames});
+    this.setState({ chosenNames: chosenNames });
   }
 
-  updateRating(list){//(name, rating) {
-    /*const chosenNames = JSON.parse(JSON.stringify(this.state.chosenNames));
-    for (var item of chosenNames) {
-      if (item.babyname.name === name) {
-        item.rating = rating;
-        break;
-      }
-    }
-    this.setState({chosenNames: chosenNames});
-    */
+
+  updateRating(list) {
     this.setState({ chosenNames: list });
   }
 

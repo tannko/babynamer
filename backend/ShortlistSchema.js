@@ -1,33 +1,25 @@
-const Data = require('./data');
+const Babyname = require('./babyname');
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const NameRatingSchema = new Schema (
+const EditorSchema = new Schema (
   {
-    babyname: Data.schema,
-    rating: Number,
-    ratingFromShare: Number
-  }
-);
-const SharedSchema = new Schema (
-  {
-    user: ObjectId,
-    status: Number // 0 - pending, 1 - accepted
-  }
-);
-const OwnerSchema = new Schema (
-  {
-    user: ObjectId,
-    name: String
+    id: ObjectId,
+    name: String, // user name
+    list: {
+      type: Map,
+      of: Number
+    },
+    isUpdated: Boolean
   }
 );
 const ShortlistSchema = new Schema (
   {
-    name: String,
-    list: [NameRatingSchema],
-    owner: OwnerSchema,
-    sharedWith: SharedSchema
+    name: String, // list name
+    status: Number, // 0 - not shared, 1 - pending, 2 - accepted
+    owner: EditorSchema,
+    partner: EditorSchema
   }
 );
 

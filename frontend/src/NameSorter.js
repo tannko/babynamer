@@ -31,12 +31,15 @@ class NameSorter extends React.Component {
   }
 
   yesHandleClick() {
-    const chosenNames = JSON.parse(JSON.stringify(this.props.chosenNames));//this.props.chosenNames.slice();
+    /*const chosenNames = JSON.parse(JSON.stringify(this.props.chosenNames));//this.props.chosenNames.slice();
     chosenNames.push({
       babyname: this.state.names[this.state.nameToShowIndex],
       rating: 0,
       ratingFromShare: 0
-    });
+    });*/
+    const name = this.state.names[this.state.nameToShowIndex].name;
+    const chosenNames = new Map(this.props.chosenNames);
+    chosenNames.set(name, 0);
     this.props.updateChosenNames(chosenNames);
     this.moveIndex();
   }
@@ -64,8 +67,8 @@ class NameSorter extends React.Component {
     const name = names.length == 0 ? "" : names[nameIndex].name;
     const meaning = names.length == 0 ? "" : names[nameIndex].meaning;
     const favourNames = this.props.chosenNames;
-    const nameForm = favourNames.length == 1 ? " name" : " names";
-    const countNames = "You have " + favourNames.length + nameForm + " in your shortlist";
+    const nameForm = favourNames.size == 1 ? " name" : " names";
+    const countNames = "You have " + favourNames.size + nameForm + " in your shortlist";
     return (
       <MDBContainer className="w-50">
         <MDBRow className="min-vh-100 align-items-center justify-content-center">

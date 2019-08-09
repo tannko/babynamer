@@ -153,7 +153,7 @@ class ModalList extends React.Component {
 
   render() {
     const shortlist = this.props.shortlist;
-    const isShared = shortlist.sharedWith == null ? false : true;
+    const isShared = shortlist.partner == null ? false : true;
     const isUpdated = this.state.isUpdated;
     const sharedWithName = this.state.sharedWithUser == null ? "" : this.state.sharedWithUser.name;
     const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + sharedWithName }</div> : "";

@@ -3,7 +3,7 @@ const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const Data = require('./data');
+const Babyname = require('./babyname');
 const Shortlist = require('./ShortlistSchema');
 const bcrypt = require('bcrypt');
 const {User, validate} = require('./UserSchema');
@@ -90,7 +90,7 @@ passport.use(new LocalStrategy(
 ));
 
 router.get('/test/gender/:gender', (req, res) => {
-  Data.find({ gender : req.params.gender },(err, data) => {
+  Babyname.find({ gender : req.params.gender },(err, data) => {
     if (err) {
       console.log(err);
     } else {
@@ -143,8 +143,9 @@ router.post('/signin',
 
 // save new shortlist
 router.post('/saveList', (req, res) => {
-  let user = req.body.user;
-  let list = req.body.list;
+  const user = req.body.user;
+  const shortlist = req.body.shortlist;
+  const nameRatingList = req.body.nameRatingList;
   console.log('start list saving');
   User.findOne({ email: user.email }, (err, user) => {
     if (err) {
@@ -158,16 +159,17 @@ router.post('/saveList', (req, res) => {
     }
 
     const owner = {
-      user: user._id,
-      name: user.name
+      id: user._id,
+      name: user.name,
+      list: nameRatingList,
+      isUpdated: false
     };
 
     let shortlist = new Shortlist({
-      name: list.name,
-      //isShared: list.isShared,
-      list: list.namesRatings,
+      name: shortlist.name,
+      status: shortlist.status,
       owner: owner,
-      sharedWith: list.sharedWith
+      partner: shortlist.partner
     });
 
     shortlist.save( err => {
