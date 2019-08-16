@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
+import { MDBContainer } from 'mdbreact';
 import NameSorter from './NameSorter';
 import GenderChooser from './GenderChooser';
 import ShortList from './ShortList';
+import Navbar from './Navbar';
+
 
 class App extends Component {
   constructor() {
@@ -63,9 +66,12 @@ class App extends Component {
     }
 
     return(
-      <div>
-        {currentView}
-      </div>
+      <MDBContainer className="min-vh-100 align-items-center justify-content-center">
+        <Navbar activeItem="newlist"/>
+          <div>
+            {currentView}
+          </div>
+      </MDBContainer>
     );
   }
 }

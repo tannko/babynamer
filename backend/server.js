@@ -17,6 +17,7 @@ const API_PORT = 3003;
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 const router = express.Router();
 
 // this is our MongoDB database
@@ -145,7 +146,9 @@ router.post('/signin',
 router.post('/saveList', (req, res) => {
   const user = req.body.user;
   const shortlist = req.body.shortlist;
-  const nameRatingList = req.body.nameRatingList;
+  const list = new Map([...req.body.list]);
+  //console.log('nameRatingList: ' + JSON.stringify(req.body.list));
+
   console.log('start list saving');
   User.findOne({ email: user.email }, (err, user) => {
     if (err) {
@@ -161,38 +164,43 @@ router.post('/saveList', (req, res) => {
     const owner = {
       id: user._id,
       name: user.name,
-      list: nameRatingList,
+      list: list,
       isUpdated: false
     };
 
-    let shortlist = new Shortlist({
+    let newlist = new Shortlist({
       name: shortlist.name,
       status: shortlist.status,
       owner: owner,
       partner: shortlist.partner
     });
 
-    shortlist.save( err => {
+    newlist.save( err => {
       if (err) {
         console.log('error saving shortlist');
-        res.status(400).send('error saving shortlist');
+        res.status(400).send('error saving shortlist: ' + err);
+      } else {
+        console.log('shortlist saved!');
+        res.status(200).send('shortlist successfully saved');
       }
-      console.log('shortlist saved!');
-      res.status(200).send('shortlist successfully saved');
     });
 
   });
 });
 
 router.post('/updateList', (req, res) => {
-  const shortlist = req.body.shortlist;
-  Shortlist.updateOne({ _id: shortlist._id }, shortlist, (err, updres) => {
+  //const shortlist = req.body.shortlist;
+  const id = req.body.id;
+  const list = new Map([...req.body.list]);
+  const field = req.body.editor + '.list';
+  Shortlist.updateOne({ _id: id }, { field: list }, (err, updres) => {
     if (err) {
       console.log('update list error: ' + err);
       res.status(400).send('update list error');
+    } else {
+      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+      res.status(200).send('list updated');
     }
-    console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-    res.status(200).send('list updated');
   });
 });
 
@@ -203,9 +211,10 @@ router.post('/rename', (req, res) => {
     if (err) {
       console.log('rename list error: ' + err);
       res.status(400).send('rename list error');
+    } else {
+      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+      res.status(200).send('updated');
     }
-    console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-    res.status(200).send('updated');
   });
 });
 
@@ -215,15 +224,17 @@ router.post('/remove', (req, res) => {
     if (err) {
       console.log('remove list error:' + err);
       res.status(400).send('remove list error');
+    } else {
+      console.log('removed: ' + res.deletedCount);
+      res.status(200).send('removed');
     }
-    console.log('removed: ' + res.deletedCount);
-    res.status(200).send('removed');
   });
 });
 
 router.post('/share', (req, res) => {
   const email = req.body.email;
   const id = req.body.id;
+  const nameslist = req.body.list;
   User.findOne({ email: email }, ( err, user ) => {
     if (err) {
       console.log('error looking for user with email ' + email);
@@ -235,50 +246,55 @@ router.post('/share', (req, res) => {
       res.status(400).send('user with email ' + email + ' is not found');
     }
 
-    const sharedWith = {
-      user: user._id,
-      status: 0
+    const partner = {
+      id: user._id,
+      name: user.name,
+      list: new Map([...nameslist]),
+      isUpdated: false
     };
-    Shortlist.updateOne({ _id: id }, { sharedWith: sharedWith }, (err, updres) => {
+    Shortlist.updateOne({ _id: id }, { status: 1, partner: partner }, (err, updres) => {
       if (err) {
         console.log('share list error: ' + err);
         res.status(400).send('share list error');
+      } else {
+        console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+        res.status(200).send('shared');
       }
-      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-      res.status(200).send('shared');
     });
   });
 });
 
 router.post('/unshare', (req, res) => {
   const id = req.body.id;
-  Shortlist.updateOne({ _id: id }, { sharedWith: null }, (err, updres) => {
+  Shortlist.updateOne({ _id: id }, { partner: null, status: 0 }, (err, updres) => {
     if (err) {
       console.log('unshare list error: ' + err);
       res.status(400).send('unshare list error');
+    } else {
+      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+      res.status(200).send('unshared');
     }
-    console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-    res.status(200).send('unshared');
   });
 });
 
 router.post('/accept', (req, res) => {
   const listId = req.body.id;
   console.log('user' + req.body.user + ' accepts list ' + listId);
-  Shortlist.updateOne({ _id: listId }, { 'sharedWith.status': 1 }, (err, updres) => {
+  Shortlist.updateOne({ _id: listId }, { status : 2 }, (err, updres) => {
     if (err) {
       console.log('accept list error: ' + err);
       res.status(400).send('accept list error');
+    } else {
+      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+      res.status(200).send('accepted');
     }
-    console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-    res.status(200).send('accepted');
   })
 });
 
-router.get('/lists/:id', (req, res) => {
-  const userId = req.params.id;
+router.get('/lists/:userId', (req, res) => {
+  const userId = req.params.userId;
   console.log('userId: ' + userId);
-  Shortlist.find({ 'owner.user': userId }, (err, data) => {
+  Shortlist.find({ 'owner.id': userId }, '_id name', (err, data) => {
     if (err) {
       console.log('list searching error');
       res.status(400).send('lists searching error');
@@ -288,16 +304,30 @@ router.get('/lists/:id', (req, res) => {
   });
 });
 
+router.get('/list/:listId', (req, res) => {
+  //console.log("list id: " + req.params.listId);
+  Shortlist.findById(req.params.listId, (err, shortlist) => {
+    if (err) {
+      console.log('shortlist searching error');
+      res.status(400).send('shortlist searching error');
+    } else {
+      //console.log('list found: ' + JSON.stringify(shortlist));
+      res.send(shortlist);
+    }
+  });
+});
+
 router.get('/shared/:id', (req, res) => {
   const userId = req.params.id;
   console.log('shared with ' + userId);
-  Shortlist.find({ 'sharedWith.user': userId }, (err, data) => {
+  Shortlist.find({ 'partner.id': userId }, '_id name status owner.name', (err, data) => {
     if (err) {
       console.log('shared lists searching error');
       res.status(400).send('shared lists searching error');
+    } else {
+      console.log('shared lists found: ' + data.length);
+      res.send(data);
     }
-    console.log('shared lists found: ' + data.length);
-    res.send(data);
   });
 });
 
@@ -332,5 +362,12 @@ io.on('connection', socket => {
       io.sockets.emit("listIsUpdated", shortlist._id);
     });
   });
+
+  /*socket.on("testSaveList", data => {
+    const user = data.user;
+    const shortlist = data.shortlist;
+    const list = data.list;
+    console.log('nameRatingList: ' + JSON.stringify(data.list));
+  });*/
 });
 server.listen(API_PORT);

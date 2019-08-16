@@ -6,48 +6,23 @@ class ShortlistBody extends React.Component {
   constructor(props) {
     super(props);
     this.handleStarClick = this.handleStarClick.bind(this);
-    this.handleSharedStarClick = this.handleSharedStarClick.bind(this);
+    //this.handleSharedStarClick = this.handleSharedStarClick.bind(this);
   }
 
   handleStarClick(nextValue, prevValue, name) {
-    const list = JSON.parse(JSON.stringify(this.props.list));
-    for (var item of list) {
-      if (item.babyname.name === name) {
-          item.rating = nextValue;
-          break;
-      }
-    }
-    this.props.updateRating(list);
-  }
-
-  handleSharedStarClick(nextValue, prevValue, name) {
-    const list = JSON.parse(JSON.stringify(this.props.list));
-    for (var item of list) {
-      if (item.babyname.name === name) {
-        item.ratingFromShare = nextValue;
-        break;
-      }
-    }
+    const list =  new Map(this.props.list);
+    list.set(name, nextValue);
     this.props.updateRating(list);
   }
 
   render() {
     const rows = [];
-    if (this.props.shared) {
-      this.props.list.forEach( item => {
-        rows.push(<SharedListRow name={item.babyname.name}
-                                 rating={item.rating}
-                                 ratingFromShare={item.ratingFromShare}
-                                 starClick={this.handleSharedStarClick} />);
+
+      this.props.list.forEach((rating, name) => {
+        rows.push(<ShortListRow name={name}
+                                rating={rating}
+                                starClick={this.handleStarClick} />);
       });
-    } else {
-      this.props.list.forEach((item) => {
-        rows.push(<ShortListRow name={item.babyname.name}
-                                rating={item.rating}
-                                ratingFromShare={item.ratingFromShare}
-                                starClick={this.handleStarClick}/>);
-      });
-    }
 
     return(
       <MDBTable scrollY maxHeight="60vh" className="text-left">
@@ -71,8 +46,6 @@ class ShortListRow extends React.Component {
   render() {
     const name = this.props.name;
     const rating = this.props.rating;
-    const ratingFromShare = this.props.ratingFromShare;
-    const commonRating = ratingFromShare == 0 ? "" : ratingFromShare + rating;
     return(
       <tr>
         <td>{name}</td>
@@ -83,13 +56,14 @@ class ShortListRow extends React.Component {
               value={rating}
               onStarClick={this.onStarClick}/>
         </td>
-        <td>{commonRating}</td>
       </tr>
     );
   }
 }
 
-class SharedListRow extends React.Component {
+/*<td>{commonRating}</td>*/
+
+/*class SharedListRow extends React.Component {
   constructor(props) {
     super(props);
     this.onStarClick = this.onStarClick.bind(this);
@@ -120,5 +94,5 @@ class SharedListRow extends React.Component {
     );
   }
 }
-
+*/
 export default ShortlistBody;

@@ -13,12 +13,12 @@ class MyLists extends React.Component {
   constructor(props) {
     super(props);
     this.state = { lists: [] };
-    this.updateRating = this.updateRating.bind(this);
-    //this.updateInfo = this.updateInfo.bind(this);
+    //this.updateRating = this.updateRating.bind(this);
   }
 
   componentDidMount() {
     const user = getUser();
+    // change function to get only id and names of lists
     axios.get('http://localhost:3003/api/lists/' + user._id)
       .then( response => {
         this.setState({ lists: response.data });
@@ -42,28 +42,27 @@ class MyLists extends React.Component {
     }
   }
 */
-  updateRating(list) {
+/*  updateRating(list) {
     const updatedLists = JSON.parse(JSON.stringify(this.state.lists));
     for (var item of updatedLists) {
-      if (item._id === list._id) { // what if we have two lists with the same name??
+      if (item._id === list._id) {
         updatedLists[updatedLists.indexOf(item)] = list;
         break;
       }
     }
     this.setState({ lists: updatedLists });
   }
-
+*/
   render() {
     const qty = this.state.lists.length;
     const rows = [];
     const btnStyle = {
       'border-radius' : '50%'
     };
-    const ratingLabel = this.state.ratingLabel;
     this.state.lists.forEach( list => {
       rows.push(
         <MDBCol md="4">
-          <ModalList shortlist={list} updateRating={this.updateRating} shared={false} />
+          <ModalList shortlist={list} editor={'owner'} />
         </MDBCol>
       );
     });

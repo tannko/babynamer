@@ -16,7 +16,7 @@ class SharedWithMe extends React.Component {
       timestamp: 0
     };
     this.rerender = this.rerender.bind(this);
-    this.updateRating = this.updateRating.bind(this);
+    //this.updateRating = this.updateRating.bind(this);
   }
 
   componentDidMount() {
@@ -46,30 +46,30 @@ class SharedWithMe extends React.Component {
     this.setState({ editListMode: true });
   }
 
-  updateRating(list) {
+/*  updateRating(list) {
     const updatedLists = JSON.parse(JSON.stringify(this.state.sharedLists));
     for (var item of updatedLists) {
-      if (item._id === list._id) { // what if we have two lists with the same name??
+      if (item._id === list._id) {
         updatedLists[updatedLists.indexOf(item)] = list;
         break;
       }
     }
     this.setState({ sharedLists: updatedLists });
   }
-
+*/
   render() {
     const rows = [];
     this.state.sharedLists.forEach( list => {
-      const status = list.sharedWith.status;
+      const status = list.status;
       // sharing is pending
-      if (status === 0) {
+      if (status === 1) {
         rows.push(
           <Invitation list={list} rerender={this.rerender} />
         );
-      } else {
+      } else if (status === 2) {
         rows.push(
           <MDBCol md="4">
-            <ModalList shortlist={list} updateRating={this.updateRating} shared={true}/>
+            <ModalList shortlist={list} editor={'partner'}/>
           </MDBCol>
         );
       }

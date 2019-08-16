@@ -6,6 +6,7 @@ import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbrea
 import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBTable, MDBInput } from 'mdbreact';
 import { getUser } from './utils';
+import { socket } from './socket_api';
 
 class ShortList extends React.Component {
   constructor(props) {
@@ -26,11 +27,15 @@ class ShortList extends React.Component {
       status: 0,
       partner: null
     };
+
+    //const list = new Map();
+    //list.set('name', 0);
     const dataToSave = {
       user: getUser(),
       shortlist: shortlist,
-      nameRatingList: this.props.list
+      list: [...this.props.list]
     };
+    //socket.emit("testSaveList", dataToSave);
 
     axios.post('http://localhost:3003/api/saveList', dataToSave)
       .then(res => {
@@ -66,6 +71,8 @@ class ShortList extends React.Component {
         starClick={this.starClick}/>);
     });
 
+    const count = this.props.list.size + " names";
+
     return (
       <MDBContainer className="w-50">
         <MDBRow className="min-vh-100 align-items-center justify-content-center">
@@ -80,6 +87,7 @@ class ShortList extends React.Component {
                 </MDBTable>
                 <MDBBtn color="secondary" onClick={this.cancelClick}>Cancel</MDBBtn>
                 <MDBBtn color="primary" onClick={this.saveClick}>Save</MDBBtn>
+                <div>{count}</div>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

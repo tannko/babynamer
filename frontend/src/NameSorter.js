@@ -69,6 +69,7 @@ class NameSorter extends React.Component {
     const favourNames = this.props.chosenNames;
     const nameForm = favourNames.size == 1 ? " name" : " names";
     const countNames = "You have " + favourNames.size + nameForm + " in your shortlist";
+    const btnClass = names.length == 0 ? "disabled" : "";
     return (
       <MDBContainer className="w-50">
         <MDBRow className="min-vh-100 align-items-center justify-content-center">
@@ -80,8 +81,8 @@ class NameSorter extends React.Component {
               <MDBCardBody className="text-center">
                 <MDBCardTitle>{name}</MDBCardTitle>
                 <MDBCardText>{meaning}</MDBCardText>
-                <MDBBtn onClick={this.moveIndex}>NO</MDBBtn>
-                <MDBBtn onClick={this.yesHandleClick}>YES</MDBBtn>
+                <MDBBtn className={btnClass} onClick={this.moveIndex}>NO</MDBBtn>
+                <MDBBtn className={btnClass} onClick={this.yesHandleClick}>YES</MDBBtn>
               </MDBCardBody>
               <MDBCardFooter>
                 <MDBProgress value={this.state.progress} />

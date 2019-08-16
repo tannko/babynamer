@@ -31,3 +31,11 @@ export const getUser = () => {
   }
   return user;
 }
+
+export const objectToMap = (object) => {
+    let map = new Map();
+    for (let k of Object.keys(object)) {
+      map.set(k, object[k]);
+    }
+    return map;
+}

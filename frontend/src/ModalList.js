@@ -12,6 +12,7 @@ import RemoveModal from './RemoveModal';
 import DropdownMenu from './DropdownMenu';
 import UnshareModal from './UnshareModal';
 import { socket } from './socket_api';
+import { objectToMap } from './utils';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -21,8 +22,10 @@ class ModalList extends React.Component {
       shareModal: false,
       renameModal: false,
       removeModal: false,
-      initialList: [],
-      sharedWithUser: null,
+      initialList: new Map(),
+      updatedList: new Map(),
+      shortlist: {},
+      //sharedWithUser: null,
       isUpdated: false
     }
     this.toggle = this.toggle.bind(this);
@@ -38,10 +41,30 @@ class ModalList extends React.Component {
   }
 
   componentDidMount() {
+    // as we get from props only id and name, get full shortlist from server by id
+    // and put it list to the state as an initial list
 
-    this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
+    const listId = this.props.shortlist._id;
+    axios.get('http://localhost:3003/api/list/' + listId)
+      .then( response => {
+        const shortlist = response.data;
+        this.setState({ shortlist: shortlist });
+        let nameslist;
+        if (this.props.editor === 'partner') {
+          nameslist = objectToMap(shortlist.partner.list);
+        } else {
+          nameslist = objectToMap(shortlist.owner.list);
+        }
+        this.setState({ initialList: nameslist, updatedList: nameslist });
+
+      })
+      .catch( error => {
+
+      });
+
+    //this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
     // TO DO
-    if (this.props.shortlist.sharedWith != null) {
+    /*if (this.props.shortlist.sharedWith != null) {
       const sharedId = this.props.shortlist.sharedWith.user;
       axios.get('http://localhost:3003/api/user/' + sharedId)
         .then( response => {
@@ -50,7 +73,7 @@ class ModalList extends React.Component {
         .catch( error => {
 
         });
-    }
+    }*/
 
     socket.on('listIsUpdated', this.setUpdateIcon);
   }
@@ -65,7 +88,7 @@ class ModalList extends React.Component {
     if (this.state.modal) {
       this.updateRating(this.state.initialList);
     } else {
-      this.setState({ isUpdated: false });
+      //this.setState({ isUpdated: false });
     }
 
     this.setState({
@@ -74,13 +97,7 @@ class ModalList extends React.Component {
   }
 
   updateRating(list) {
-    const shortlist = {
-      _id: this.props.shortlist._id,
-      name: this.props.shortlist.name,
-      list: list,
-      sharedWith: this.props.shortlist.sharedWith
-    };
-    this.props.updateRating(shortlist);
+    this.setState({ updatedList: list });
   }
 
   handleShareClick() {
@@ -110,11 +127,15 @@ class ModalList extends React.Component {
 
   handleSaveClick() {
     // update shortlist
-    if (this.props.shared) {
-      socket.emit("saveDataFromShared", this.props.shortlist);
+    if (this.props.editor === 'partner') {
+      socket.emit("saveDataFromShared", this.state.shortlist);
     } else {
-    axios.post('http://localhost:3003/api/updateList',
-      { shortlist: this.props.shortlist })
+      const params = {
+        id: this.state.shortlist._id,
+        editor: this.props.editor,
+        list: [...this.state.updatedList]
+      };
+    axios.post('http://localhost:3003/api/updateList', params)
       .then( res => {
         // show modal that list succesfully updated
       })
@@ -125,9 +146,14 @@ class ModalList extends React.Component {
   }
 
   shareList(email) {
+    const nameslist = new Map([]);
+    this.state.updatedList.forEach((rating, name) => {
+      nameslist.set(name, 0);
+    });
     const params = {
       id: this.props.shortlist._id,
-      email: email
+      email: email,
+      list: [...nameslist]
     };
     axios.post('http://localhost:3003/api/share', params)
       .then( response => {
@@ -152,12 +178,12 @@ class ModalList extends React.Component {
   }
 
   render() {
-    const shortlist = this.props.shortlist;
+    const shortlist = this.state.shortlist;
     const isShared = shortlist.partner == null ? false : true;
     const isUpdated = this.state.isUpdated;
-    const sharedWithName = this.state.sharedWithUser == null ? "" : this.state.sharedWithUser.name;
-    const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + sharedWithName }</div> : "";
-    const upperDiv = !this.props.shared ?
+    const partner = shortlist.partner == null ? "" : shortlist.partner.name;
+    const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + partner }</div> : "";
+    const upperDiv = this.props.editor === 'owner' ?
             <div className="d-flex mb-3">
               { sharedMessage }
               <div className="ml-auto">
@@ -167,7 +193,6 @@ class ModalList extends React.Component {
                     isShared={isShared} />
                 </div></div> :
               <div></div>;
-
     return (
       <MDBContainer>
 
@@ -175,7 +200,7 @@ class ModalList extends React.Component {
           <MDBModalHeader toggle={this.toggle}>{shortlist.name}</MDBModalHeader>
           <MDBModalBody>
             {upperDiv}
-            <ShortlistBody list={shortlist.list} updateRating={this.updateRating} shared={this.props.shared}></ShortlistBody>
+            <ShortlistBody list={this.state.updatedList} updateRating={this.updateRating}></ShortlistBody>
           </MDBModalBody>
           <MDBModalFooter>
             <MDBBtn color="secondary" onClick={this.toggle}>Cancel</MDBBtn>
@@ -187,7 +212,7 @@ class ModalList extends React.Component {
         <RemoveModal toggle={this.handleRemoveClick} modal={this.state.removeModal} listname={shortlist.name} />
         <UnshareModal toggle={this.handleUnshareClick}
                       modal={this.state.unshareModal}
-                      sharedWithUser={this.state.sharedWithUser}
+                      partner={partner}
                       unshare={this.unshare}/>
 
         <a href="#" onClick={this.toggle}>
@@ -211,7 +236,7 @@ class ModalList extends React.Component {
           <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"/>
             <MDBCardBody>
               <MDBCardTitle>{shortlist.name}</MDBCardTitle>
-              <MDBCardText> timestamp </MDBCardText>
+              <MDBCardText> has { this.state.updatedList.size } names </MDBCardText>
             </MDBCardBody>
         </MDBCard>
         </a>
