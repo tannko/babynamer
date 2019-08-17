@@ -127,9 +127,9 @@ class ModalList extends React.Component {
 
   handleSaveClick() {
     // update shortlist
-    if (this.props.editor === 'partner') {
+    /*if (this.props.editor === 'partner') {
       socket.emit("saveDataFromShared", this.state.shortlist);
-    } else {
+    } else {*/
       const params = {
         id: this.state.shortlist._id,
         editor: this.props.editor,
@@ -142,7 +142,7 @@ class ModalList extends React.Component {
       .catch( err => {
         // show modal about error
       });
-    }
+    //}
   }
 
   shareList(email) {

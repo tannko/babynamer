@@ -191,9 +191,12 @@ router.post('/saveList', (req, res) => {
 router.post('/updateList', (req, res) => {
   //const shortlist = req.body.shortlist;
   const id = req.body.id;
-  const list = new Map([...req.body.list]);
+  const list = new Map(req.body.list);
   const field = req.body.editor + '.list';
-  Shortlist.updateOne({ _id: id }, { field: list }, (err, updres) => {
+  //console.log('id: ' + id);
+  //console.log('field: ' + field);
+  //console.log('list: ' + JSON.stringify(list));
+  Shortlist.updateOne({ _id: id }, { [field]: list }, (err, updres) => {
     if (err) {
       console.log('update list error: ' + err);
       res.status(400).send('update list error');
