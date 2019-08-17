@@ -4,6 +4,7 @@ import { MDBContainer, MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } 
 import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from 'mdbreact';
 import { MDBBtn, MDBRow, MDBIcon, MDBCardHeader, MDBBadge } from 'mdbreact';
 import { MDBDropdown, MDBDropdownMenu, MDBDropdownItem, MDBDropdownToggle } from 'mdbreact';
+import { MDBTabContent, MDBTabPane, MDBNav, MDBNavItem, MDBNavLink } from 'mdbreact';
 import ShortList from './ShortList';
 import ShortlistBody from './ShortlistBody';
 import ShareModal from './ShareModal';
@@ -25,6 +26,7 @@ class ModalList extends React.Component {
       initialList: new Map(),
       updatedList: new Map(),
       shortlist: {},
+      activeItem: "1",
       //sharedWithUser: null,
       isUpdated: false
     }
@@ -94,6 +96,12 @@ class ModalList extends React.Component {
     this.setState({
       modal: !this.state.modal
     });
+  }
+
+  toggleRating = tab => e => {
+    if (this.state.activeItem !== tab) {
+      this.setState({ activeItem: tab });
+    }
   }
 
   updateRating(list) {
@@ -200,7 +208,27 @@ class ModalList extends React.Component {
           <MDBModalHeader toggle={this.toggle}>{shortlist.name}</MDBModalHeader>
           <MDBModalBody>
             {upperDiv}
-            <ShortlistBody list={this.state.updatedList} updateRating={this.updateRating}></ShortlistBody>
+            <MDBNav className="nav-tabs mt-5">
+              <MDBNavItem>
+                <MDBNavLink to="#" active={this.state.activeItem === "1"} onClick={this.toggleRating("1")} role="tab">
+                  My rating
+                </MDBNavLink>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBNavLink to="#" active={this.state.activeItem === "2"} onClick={this.toggleRating("2")} role="tab">
+                  Common Rating
+                </MDBNavLink>
+              </MDBNavItem>              
+            </MDBNav>
+            <MDBTabContent activeItem={this.state.activeItem}>
+              <MDBTabPane tabId="1" role="tabpanel">
+                <ShortlistBody list={this.state.updatedList} updateRating={this.updateRating}></ShortlistBody>
+              </MDBTabPane>
+              <MDBTabPane tabId="2" role="tabpanel">
+                Here will be custom rating
+              </MDBTabPane>
+            </MDBTabContent>
+
           </MDBModalBody>
           <MDBModalFooter>
             <MDBBtn color="secondary" onClick={this.toggle}>Cancel</MDBBtn>
