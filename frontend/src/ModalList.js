@@ -14,6 +14,7 @@ import DropdownMenu from './DropdownMenu';
 import UnshareModal from './UnshareModal';
 import { socket } from './socket_api';
 import { objectToMap } from './utils';
+import CommonRating from './CommonRating';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -218,14 +219,14 @@ class ModalList extends React.Component {
                 <MDBNavLink to="#" active={this.state.activeItem === "2"} onClick={this.toggleRating("2")} role="tab">
                   Common Rating
                 </MDBNavLink>
-              </MDBNavItem>              
+              </MDBNavItem>
             </MDBNav>
             <MDBTabContent activeItem={this.state.activeItem}>
               <MDBTabPane tabId="1" role="tabpanel">
                 <ShortlistBody list={this.state.updatedList} updateRating={this.updateRating}></ShortlistBody>
               </MDBTabPane>
               <MDBTabPane tabId="2" role="tabpanel">
-                Here will be custom rating
+                <CommonRating shortlist={this.state.shortlist} />
               </MDBTabPane>
             </MDBTabContent>
 
