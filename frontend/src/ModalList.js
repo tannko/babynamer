@@ -190,7 +190,7 @@ class ModalList extends React.Component {
     const shortlist = this.state.shortlist;
     const isShared = shortlist.partner == null ? false : true;
     const isUpdated = this.state.isUpdated;
-    const partner = shortlist.partner == null ? "" : shortlist.partner.name;
+    const partner = shortlist.partner == null ? null : shortlist.partner.name;
     const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + partner }</div> : "";
     const upperDiv = this.props.editor === 'owner' ?
             <div className="d-flex mb-3">
@@ -216,7 +216,11 @@ class ModalList extends React.Component {
                 </MDBNavLink>
               </MDBNavItem>
               <MDBNavItem>
-                <MDBNavLink to="#" active={this.state.activeItem === "2"} onClick={this.toggleRating("2")} role="tab">
+                <MDBNavLink to="#"
+                            active={this.state.activeItem === "2"}
+                            disabled={shortlist.partner === null}
+                            onClick={this.toggleRating("2")}
+                            role="tab">
                   Common Rating
                 </MDBNavLink>
               </MDBNavItem>
@@ -226,7 +230,7 @@ class ModalList extends React.Component {
                 <ShortlistBody list={this.state.updatedList} updateRating={this.updateRating}></ShortlistBody>
               </MDBTabPane>
               <MDBTabPane tabId="2" role="tabpanel">
-                <CommonRating shortlist={this.state.shortlist} />
+                { shortlist.partner !== null && <CommonRating shortlist={this.state.shortlist} /> }
               </MDBTabPane>
             </MDBTabContent>
 
