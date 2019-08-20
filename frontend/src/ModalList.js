@@ -38,8 +38,10 @@ class ModalList extends React.Component {
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleUnshareClick = this.handleUnshareClick.bind(this);
-    this.shareList = this.shareList.bind(this);
+    this.share = this.share.bind(this);
     this.unshare = this.unshare.bind(this);
+    this.rename = this.rename.bind(this);
+    this.remove = this.remove.bind(this);
     this.setUpdateIcon = this.setUpdateIcon.bind(this);
     this.getData = this.getData.bind(this);
   }
@@ -50,22 +52,6 @@ class ModalList extends React.Component {
 
     const listId = this.props.shortlist._id;
     this.getData(listId);
-    /*axios.get('http://localhost:3003/api/list/' + listId)
-      .then( response => {
-        const shortlist = response.data;
-        this.setState({ shortlist: shortlist });
-        let nameslist;
-        if (this.props.editor === 'partner') {
-          nameslist = objectToMap(shortlist.partner.list);
-        } else {
-          nameslist = objectToMap(shortlist.owner.list);
-        }
-        this.setState({ initialList: nameslist, updatedList: nameslist });
-
-      })
-      .catch( error => {
-
-      });*/
 
     socket.on('listIsUpdated', this.setUpdateIcon);
   }
@@ -160,7 +146,7 @@ class ModalList extends React.Component {
 
 
 
-  shareList(email) {
+  share(email) {
     const nameslist = new Map([]);
     this.state.updatedList.forEach((rating, name) => {
       nameslist.set(name, 0);
@@ -192,7 +178,37 @@ class ModalList extends React.Component {
         this.getData(this.props.shortlist._id);
       })
       .catch( error => {
+        // TBD
+      });
+  }
 
+  rename(newname) {
+    const params = {
+      id: this.props.shortlist._id,
+      name: newname
+    };
+    axios.post('http://localhost:3003/api/rename', params)
+      .then( response => {
+        this.handleRenameClick();
+        this.getData(this.props.shortlist._id);
+      })
+      .catch( error => {
+        // TBD
+      });
+  }
+
+  remove() {
+    const params = {
+      id: this.props.shortlist._id
+    };
+    //socket.emit("remove", this.props.shortlist._id);
+    axios.post('http://localhost:3003/api/remove', params)
+      .then( response => {
+        this.handleRemoveClick();
+        this.toggle();
+      })
+      .catch( error => {
+        // TBD
       });
   }
 
@@ -250,9 +266,12 @@ class ModalList extends React.Component {
             <MDBBtn color="primary" onClick={this.handleSaveClick}>Save</MDBBtn>
           </MDBModalFooter>
         </MDBModal>
-        <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.shareList} />
-        <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} />
-        <RemoveModal toggle={this.handleRemoveClick} modal={this.state.removeModal} listname={shortlist.name} />
+        <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.share} />
+        <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} rename={this.rename} />
+        <RemoveModal toggle={this.handleRemoveClick}
+                     modal={this.state.removeModal}
+                     listname={shortlist.name}
+                     remove={this.remove}/>
         <UnshareModal toggle={this.handleUnshareClick}
                       modal={this.state.unshareModal}
                       partner={partner}

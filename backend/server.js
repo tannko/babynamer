@@ -6,7 +6,7 @@ const logger = require('morgan');
 const Babyname = require('./babyname');
 const Shortlist = require('./ShortlistSchema');
 const bcrypt = require('bcrypt');
-const {User, validate} = require('./UserSchema');
+const { User, validate } = require('./UserSchema');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -223,7 +223,7 @@ router.post('/rename', (req, res) => {
 
 router.post('/remove', (req, res) => {
   const id = req.body.id;
-  Shortlist.deleteOne({ _id: id }, (err, res) => {
+  Shortlist.deleteOne({ _id: id }, (err, removeres) => {
     if (err) {
       console.log('remove list error:' + err);
       res.status(400).send('remove list error');
@@ -366,11 +366,16 @@ io.on('connection', socket => {
     });
   });
 
-  /*socket.on("testSaveList", data => {
-    const user = data.user;
-    const shortlist = data.shortlist;
-    const list = data.list;
-    console.log('nameRatingList: ' + JSON.stringify(data.list));
-  });*/
+  socket.on("remove", id => {
+    Shortlist.deleteOne({ _id: id }, (err, removeres) => {
+      if (err) {
+        console.log('remove list error:' + err);
+      } else {
+        console.log('removed: ' + removeres.deletedCount);
+        //io.sockets.emit("removed");
+        io.sockets.emit("updateData");
+      }
+    });
+  })
 });
 server.listen(API_PORT);

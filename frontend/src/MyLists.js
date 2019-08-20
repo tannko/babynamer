@@ -13,6 +13,7 @@ class MyLists extends React.Component {
   constructor(props) {
     super(props);
     this.state = { lists: [] };
+    this.getData = this.getData.bind(this);
     //this.updateRating = this.updateRating.bind(this);
   }
 
@@ -26,7 +27,18 @@ class MyLists extends React.Component {
       .catch( error => {
 
       });
-    //socket.on("updatedInfoFromShared", this.updateInfo);
+    socket.on("updateData", this.getData());
+  }
+
+  getData() {
+    const user = getUser();
+    axios.get('http://localhost:3003/api/lists/' + user._id)
+      .then( response => {
+        this.setState({ lists: response.data });
+      })
+      .catch( error => {
+
+      });
   }
 /*
   updateInfo(owner) {
@@ -42,17 +54,7 @@ class MyLists extends React.Component {
     }
   }
 */
-/*  updateRating(list) {
-    const updatedLists = JSON.parse(JSON.stringify(this.state.lists));
-    for (var item of updatedLists) {
-      if (item._id === list._id) {
-        updatedLists[updatedLists.indexOf(item)] = list;
-        break;
-      }
-    }
-    this.setState({ lists: updatedLists });
-  }
-*/
+
   render() {
     const qty = this.state.lists.length;
     const rows = [];

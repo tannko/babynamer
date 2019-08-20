@@ -16,6 +16,7 @@ class RenameModal extends React.Component {
 
   handleSaveClick() {
     // save new name for the list
+    this.props.rename(this.state.newname);
   }
 
   render() {

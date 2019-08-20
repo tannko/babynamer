@@ -9,7 +9,7 @@ class RemoveModal extends React.Component {
   }
 
   handleOkClick() {
-
+    this.props.remove();
   }
 
   render() {
