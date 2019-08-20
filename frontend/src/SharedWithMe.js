@@ -115,8 +115,6 @@ class SharedWithMe extends React.Component {
                 </div>
               </MDBCardBody>
             </MDBCard>
-
-
           </MDBCol>
         </MDBRow>
 

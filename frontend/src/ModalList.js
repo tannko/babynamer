@@ -41,6 +41,7 @@ class ModalList extends React.Component {
     this.shareList = this.shareList.bind(this);
     this.unshare = this.unshare.bind(this);
     this.setUpdateIcon = this.setUpdateIcon.bind(this);
+    this.getData = this.getData.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +49,28 @@ class ModalList extends React.Component {
     // and put it list to the state as an initial list
 
     const listId = this.props.shortlist._id;
+    this.getData(listId);
+    /*axios.get('http://localhost:3003/api/list/' + listId)
+      .then( response => {
+        const shortlist = response.data;
+        this.setState({ shortlist: shortlist });
+        let nameslist;
+        if (this.props.editor === 'partner') {
+          nameslist = objectToMap(shortlist.partner.list);
+        } else {
+          nameslist = objectToMap(shortlist.owner.list);
+        }
+        this.setState({ initialList: nameslist, updatedList: nameslist });
+
+      })
+      .catch( error => {
+
+      });*/
+
+    socket.on('listIsUpdated', this.setUpdateIcon);
+  }
+
+  getData(listId) {
     axios.get('http://localhost:3003/api/list/' + listId)
       .then( response => {
         const shortlist = response.data;
@@ -64,21 +87,6 @@ class ModalList extends React.Component {
       .catch( error => {
 
       });
-
-    //this.setState({ initialList: JSON.parse(JSON.stringify(this.props.shortlist.list)) });
-    // TO DO
-    /*if (this.props.shortlist.sharedWith != null) {
-      const sharedId = this.props.shortlist.sharedWith.user;
-      axios.get('http://localhost:3003/api/user/' + sharedId)
-        .then( response => {
-          this.setState({ sharedWithUser: response.data });
-        })
-        .catch( error => {
-
-        });
-    }*/
-
-    socket.on('listIsUpdated', this.setUpdateIcon);
   }
 
   setUpdateIcon(updatedId) {
@@ -135,11 +143,7 @@ class ModalList extends React.Component {
   }
 
   handleSaveClick() {
-    // update shortlist
-    /*if (this.props.editor === 'partner') {
-      socket.emit("saveDataFromShared", this.state.shortlist);
-    } else {*/
-      const params = {
+    const params = {
         id: this.state.shortlist._id,
         editor: this.props.editor,
         list: [...this.state.updatedList]
@@ -154,6 +158,8 @@ class ModalList extends React.Component {
     //}
   }
 
+
+
   shareList(email) {
     const nameslist = new Map([]);
     this.state.updatedList.forEach((rating, name) => {
@@ -166,7 +172,10 @@ class ModalList extends React.Component {
     };
     axios.post('http://localhost:3003/api/share', params)
       .then( response => {
-
+        // close share window
+        // update shortlist modal
+        this.handleShareClick();
+        this.getData(this.props.shortlist._id);
       })
       .catch( error => {
 
@@ -179,7 +188,8 @@ class ModalList extends React.Component {
     };
     axios.post('http://localhost:3003/api/unshare', params)
       .then( response => {
-
+        this.handleUnshareClick();
+        this.getData(this.props.shortlist._id);
       })
       .catch( error => {
 
