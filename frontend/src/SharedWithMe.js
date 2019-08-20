@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { getUser } from './utils';
-import { MDBContainer, MDBCol, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn } from 'mdbreact';
+import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn } from 'mdbreact';
 import { MDBCardFooter, MDBCardHeader, MDBCardImage } from 'mdbreact';
+import { MDBCollapseHeader, MDBCollapse, MDBIcon } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
@@ -13,9 +14,11 @@ class SharedWithMe extends React.Component {
     super(props);
     this.state = {
       sharedLists: [],
-      timestamp: 0
+      timestamp: 0,
+      isInvitationsOpen: false
     };
     this.rerender = this.rerender.bind(this);
+    this.handleInvitationsClick = this.handleInvitationsClick.bind(this);
     //this.updateRating = this.updateRating.bind(this);
   }
 
@@ -46,6 +49,10 @@ class SharedWithMe extends React.Component {
     this.setState({ editListMode: true });
   }
 
+  handleInvitationsClick() {
+    this.setState({ isInvitationsOpen: !this.state.isInvitationsOpen });
+  }
+
 /*  updateRating(list) {
     const updatedLists = JSON.parse(JSON.stringify(this.state.sharedLists));
     for (var item of updatedLists) {
@@ -57,17 +64,20 @@ class SharedWithMe extends React.Component {
     this.setState({ sharedLists: updatedLists });
   }
 */
+
   render() {
-    const rows = [];
+    const isInvitationsOpen = this.state.isInvitationsOpen;
+    const accepted = [];
+    const invitations = [];
     this.state.sharedLists.forEach( list => {
       const status = list.status;
       // sharing is pending
       if (status === 1) {
-        rows.push(
+        invitations.push(
           <Invitation list={list} rerender={this.rerender} />
         );
       } else if (status === 2) {
-        rows.push(
+        accepted.push(
           <MDBCol md="4">
             <ModalList shortlist={list} editor={'partner'}/>
           </MDBCol>
@@ -77,12 +87,44 @@ class SharedWithMe extends React.Component {
     return (
       <MDBContainer>
         <Navbar activeItem="shared"/>
-        <div class="card-deck">
-          {rows}
-        </div>
+        <MDBRow>
+          <MDBCol>
+            <MDBCard className="mt-3">
+              <MDBCardHeader onClick={this.handleInvitationsClick}>
+                Invitations <MDBIcon icon={isInvitationsOpen ? "angle-up" : "angle-down"} />
+              </MDBCardHeader>
+              <MDBCollapse id="invitations" isOpen={this.state.isInvitationsOpen}>
+                <MDBCardBody>
+                  <div class="card-deck">
+                    {invitations}
+                  </div>
+                </MDBCardBody>
+              </MDBCollapse>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+        <MDBRow>
+          <MDBCol>
+            <MDBCard>
+              <MDBCardHeader>Accepted for sharing</MDBCardHeader>
+              <MDBCardBody>
+                <div class="card-deck">
+                  {accepted}
+                </div>
+              </MDBCardBody>
+            </MDBCard>
+
+
+          </MDBCol>
+        </MDBRow>
+
       </MDBContainer>
     );
   }
 }
 
 export default SharedWithMe;
+
+/*
+
+*/
