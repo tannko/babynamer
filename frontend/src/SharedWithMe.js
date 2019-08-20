@@ -74,7 +74,9 @@ class SharedWithMe extends React.Component {
       // sharing is pending
       if (status === 1) {
         invitations.push(
-          <Invitation list={list} rerender={this.rerender} />
+          <MDBCol md="4">
+            <Invitation list={list} rerender={this.rerender} />
+          </MDBCol>
         );
       } else if (status === 2) {
         accepted.push(
