@@ -206,6 +206,7 @@ class ModalList extends React.Component {
       .then( response => {
         this.handleRemoveClick();
         this.toggle();
+        this.props.updateAll();
       })
       .catch( error => {
         // TBD

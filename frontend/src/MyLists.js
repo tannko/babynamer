@@ -64,7 +64,7 @@ class MyLists extends React.Component {
     this.state.lists.forEach( list => {
       rows.push(
         <MDBCol md="4">
-          <ModalList shortlist={list} editor={'owner'} />
+          <ModalList shortlist={list} editor={'owner'} updateAll={this.getData}/>
         </MDBCol>
       );
     });
