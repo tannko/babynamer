@@ -262,6 +262,7 @@ router.post('/share', (req, res) => {
       } else {
         console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
         res.status(200).send('shared');
+        io.sockets.emit("listShared", id);
       }
     });
   });

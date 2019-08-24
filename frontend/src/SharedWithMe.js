@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getUser } from './utils';
 import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn } from 'mdbreact';
 import { MDBCardFooter, MDBCardHeader, MDBCardImage } from 'mdbreact';
-import { MDBCollapseHeader, MDBCollapse, MDBIcon } from 'mdbreact';
+import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
@@ -53,18 +53,6 @@ class SharedWithMe extends React.Component {
     this.setState({ isInvitationsOpen: !this.state.isInvitationsOpen });
   }
 
-/*  updateRating(list) {
-    const updatedLists = JSON.parse(JSON.stringify(this.state.sharedLists));
-    for (var item of updatedLists) {
-      if (item._id === list._id) {
-        updatedLists[updatedLists.indexOf(item)] = list;
-        break;
-      }
-    }
-    this.setState({ sharedLists: updatedLists });
-  }
-*/
-
   render() {
     const isInvitationsOpen = this.state.isInvitationsOpen;
     const accepted = [];
@@ -86,6 +74,8 @@ class SharedWithMe extends React.Component {
         );
       }
     });
+    const invitationsQty = invitations.length;
+    const badgeQty = <MDBBadge pill color="danger" className="ml-2"> {invitationsQty} </MDBBadge>;
     return (
       <MDBContainer>
         <Navbar activeItem="shared"/>
@@ -93,12 +83,12 @@ class SharedWithMe extends React.Component {
           <MDBCol>
             <MDBCard className="mt-3">
               <MDBCardHeader onClick={this.handleInvitationsClick}>
-                Invitations <MDBIcon icon={isInvitationsOpen ? "angle-up" : "angle-down"} />
+                {invitationsQty == 0 ? "" : badgeQty} Invitations <MDBIcon icon={isInvitationsOpen ? "angle-up" : "angle-down"} />
               </MDBCardHeader>
               <MDBCollapse id="invitations" isOpen={this.state.isInvitationsOpen}>
                 <MDBCardBody>
                   <div class="card-deck">
-                    {invitations}
+                    { invitationsQty == 0 ? "You have 0 invitations" : invitations }
                   </div>
                 </MDBCardBody>
               </MDBCollapse>
