@@ -228,8 +228,10 @@ router.post('/remove', (req, res) => {
       console.log('remove list error:' + err);
       res.status(400).send('remove list error');
     } else {
-      console.log('removed: ' + res.deletedCount);
+      console.log('removed: ' + removeres.deletedCount);
+      io.sockets.emit("listRemoved");
       res.status(200).send('removed');
+
     }
   });
 });
@@ -373,8 +375,23 @@ io.on('connection', socket => {
         console.log('remove list error:' + err);
       } else {
         console.log('removed: ' + removeres.deletedCount);
-        //io.sockets.emit("removed");
-        io.sockets.emit("updateData");
+        io.sockets.emit("listRemoved", id);
+        //io.sockets.emit("updateData");
+      }
+    });
+  });
+
+  socket.on("rename", params => {
+    const id = params.id;
+    const name = params.name;
+    Shortlist.updateOne({ _id: id }, { name: name }, (err, updres) => {
+      if (err) {
+        console.log('rename list error: ' + err);
+        //res.status(400).send('rename list error');
+      } else {
+        console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+        io.sockets.emit("listRenamed", id);
+        //res.status(200).send('updated');
       }
     });
   })

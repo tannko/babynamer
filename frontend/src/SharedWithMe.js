@@ -19,10 +19,15 @@ class SharedWithMe extends React.Component {
     };
     this.rerender = this.rerender.bind(this);
     this.handleInvitationsClick = this.handleInvitationsClick.bind(this);
+    this.getData = this.getData.bind(this);
     //this.updateRating = this.updateRating.bind(this);
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData() {
     const user = getUser();
     axios.get('http://localhost:3003/api/shared/' + user._id)
       .then( response => {
@@ -35,14 +40,7 @@ class SharedWithMe extends React.Component {
 
   rerender() {
     //change it later with sockets
-    const user = getUser();
-    axios.get('http://localhost:3003/api/shared/' + user._id)
-      .then( response => {
-        this.setState({ sharedLists: response.data });
-      })
-      .catch( error => {
-        // show modal with error message
-      });
+    this.getData();
   }
 
   handleListClick() {
@@ -75,7 +73,7 @@ class SharedWithMe extends React.Component {
       }
     });
     const invitationsQty = invitations.length;
-    const badgeQty = <MDBBadge pill color="danger" className="ml-2"> {invitationsQty} </MDBBadge>;
+    const badgeQty = <MDBBadge pill color="danger" className="ml-2">{invitationsQty}</MDBBadge>;
     return (
       <MDBContainer>
         <Navbar activeItem="shared"/>

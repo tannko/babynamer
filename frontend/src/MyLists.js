@@ -18,7 +18,7 @@ class MyLists extends React.Component {
   }
 
   componentDidMount() {
-    const user = getUser();
+    /*const user = getUser();
     // change function to get only id and names of lists
     axios.get('http://localhost:3003/api/lists/' + user._id)
       .then( response => {
@@ -26,8 +26,9 @@ class MyLists extends React.Component {
       })
       .catch( error => {
 
-      });
-    socket.on("updateData", this.getData());
+      });*/
+    this.getData();
+
   }
 
   getData() {

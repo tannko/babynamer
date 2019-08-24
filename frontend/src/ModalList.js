@@ -54,6 +54,19 @@ class ModalList extends React.Component {
     this.getData(listId);
 
     socket.on('listIsUpdated', this.setUpdateIcon);
+    socket.on('listRemoved', id => {
+      if (this.props.shortlist._id == id) {
+        this.handleRemoveClick();
+        this.toggle();
+        this.props.updateAll();
+      }
+    });
+    socket.on('listRenamed', id => {
+      if (this.props.shortlist._id == id) {
+        this.handleRenameClick();
+        this.getData(this.props.shortlist._id);
+      }
+    });
   }
 
   getData(listId) {
@@ -187,7 +200,7 @@ class ModalList extends React.Component {
       id: this.props.shortlist._id,
       name: newname
     };
-    axios.post('http://localhost:3003/api/rename', params)
+    /*axios.post('http://localhost:3003/api/rename', params)
       .then( response => {
         this.handleRenameClick();
         this.getData(this.props.shortlist._id);
@@ -195,14 +208,16 @@ class ModalList extends React.Component {
       .catch( error => {
         // TBD
       });
+    */
+    socket.emit("rename", params);
   }
 
   remove() {
     const params = {
       id: this.props.shortlist._id
     };
-    //socket.emit("remove", this.props.shortlist._id);
-    axios.post('http://localhost:3003/api/remove', params)
+    socket.emit("remove", this.props.shortlist._id);
+    /*axios.post('http://localhost:3003/api/remove', params)
       .then( response => {
         this.handleRemoveClick();
         this.toggle();
@@ -210,7 +225,8 @@ class ModalList extends React.Component {
       })
       .catch( error => {
         // TBD
-      });
+      });*/
+    //socket.on("listRemoved", this.onRemoved);
   }
 
   render() {
