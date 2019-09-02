@@ -8,7 +8,7 @@ class NameSorter extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { nameToShowIndex: 0, names: [], progress: 0 };
+    this.state = { nameToShowIndex: 0, names: [], progress: 0, errorMessage: "" };
     this.yesHandleClick = this.yesHandleClick.bind(this);
     this.moveIndex = this.moveIndex.bind(this);
     this.backClick = this.backClick.bind(this);
@@ -31,12 +31,6 @@ class NameSorter extends React.Component {
   }
 
   yesHandleClick() {
-    /*const chosenNames = JSON.parse(JSON.stringify(this.props.chosenNames));//this.props.chosenNames.slice();
-    chosenNames.push({
-      babyname: this.state.names[this.state.nameToShowIndex],
-      rating: 0,
-      ratingFromShare: 0
-    });*/
     const name = this.state.names[this.state.nameToShowIndex].name;
     const chosenNames = new Map(this.props.chosenNames);
     chosenNames.set(name, 0);
@@ -53,12 +47,14 @@ class NameSorter extends React.Component {
     } else {
       this.props.endNameSorted();
     }
-    this.setState({ progress: nextIndex * 100 / this.state.names.length });
+    this.setState({ progress: nextIndex * 100 / this.state.names.length, errorMessage: "" });
   }
 
   stopClick() {
-    // show ShortList
-    this.props.endNameSorted();
+    if (this.props.chosenNames.size == 0) {
+      this.setState({ errorMessage: "You should pick at least 1 name to save the shortlist" });
+    } else
+      this.props.endNameSorted();
   }
 
   render() {
@@ -75,8 +71,9 @@ class NameSorter extends React.Component {
         <MDBRow className="min-vh-100 align-items-center justify-content-center">
           <MDBCol >
             <MDBCard>
-              <MDBCardHeader className="text-right">
-                <MDBBtn onClick={this.stopClick}>STOP</MDBBtn>
+              <MDBCardHeader className="d-flex justify-content-end">
+                <div class="mr-auto">{this.state.errorMessage}</div>
+                <MDBBtn onClick={this.stopClick}>SAVE</MDBBtn>
               </MDBCardHeader>
               <MDBCardBody className="text-center">
                 <MDBCardTitle>{name}</MDBCardTitle>
