@@ -15,6 +15,7 @@ class ShortList extends React.Component {
     this.cancelClick = this.cancelClick.bind(this);
     this.starClick = this.starClick.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
   }
 
   handleInput(e) {
@@ -22,8 +23,10 @@ class ShortList extends React.Component {
   }
 
   saveClick() {
+    // TO DO
+    // add form checker: name is not empty
     const shortlist = {
-      name: this.props.name,
+      name: this.props.name.trim(),
       status: 0,
       partner: null
     };
@@ -31,7 +34,7 @@ class ShortList extends React.Component {
     //const list = new Map();
     //list.set('name', 0);
     const dataToSave = {
-      user: getUser(),
+      user: getUser(), // TO DO change to owner
       shortlist: shortlist,
       list: [...this.props.list]
     };
@@ -39,7 +42,6 @@ class ShortList extends React.Component {
 
     axios.post('http://localhost:3003/api/saveList', dataToSave)
       .then(res => {
-        // TO DO
         // move to my lists page
         this.props.history.push('/lists');
       })
@@ -61,6 +63,14 @@ class ShortList extends React.Component {
     this.props.updateRating(list);
   }
 
+  submitHandler = event => {
+    event.preventDefault();
+    event.target.className += " was-validated";
+    if (this.props.name.trim() !== "") {
+      this.saveClick();
+    }
+  }
+
   render() {
     const title = this.props.name;
     const rows = [];
@@ -74,24 +84,35 @@ class ShortList extends React.Component {
     const count = this.props.list.size + " names";
 
     return (
+
       <MDBContainer className="w-50">
+        <form
+          className="needs-validation"
+          onSubmit={this.submitHandler}
+          noValidate
+          >
         <MDBRow className="min-vh-100 align-items-center justify-content-center">
           <MDBCol>
             <MDBCard>
               <MDBCardBody className="text-center">
                 <MDBCardTitle className="text-center">
-                  <MDBInput value={title} size="lg" name="title" onInput={this.handleInput}/>
+                  <MDBInput label="Your list name" size="lg" name="title" onInput={this.handleInput} required pattern="\w+">
+                    <div className="invalid-feedback">
+                      Please add list name. List name can contain letters, numbers and underscore.
+                    </div>
+                  </MDBInput>
                 </MDBCardTitle>
                 <MDBTable scrollY maxHeight="60vh" className="text-left">
                   {rows}
                 </MDBTable>
                 <MDBBtn color="secondary" onClick={this.cancelClick}>Cancel</MDBBtn>
-                <MDBBtn color="primary" onClick={this.saveClick}>Save</MDBBtn>
+                <MDBBtn color="primary" type="submit">Save</MDBBtn>
                 <div>{count}</div>
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
         </MDBRow>
+        </form>
       </MDBContainer>
     );
   }

@@ -50,12 +50,12 @@ class ModalList extends React.Component {
     // as we get from props only id and name, get full shortlist from server by id
     // and put it list to the state as an initial list
 
-    const listId = this.props.shortlist._id;
-    this.getData(listId);
+    //const listId = this.props.shortlist._id;
+    this.getData();
 
     socket.on('listIsUpdated', this.setUpdateIcon);
     socket.on('listRemoved', id => {
-      if (this.props.shortlist._id == id) {
+      if (this.props.shortlist._id === id) {
         this.handleRemoveClick();
         this.toggle();
         this.props.updateAll();
@@ -64,12 +64,13 @@ class ModalList extends React.Component {
     socket.on('listRenamed', id => {
       if (this.props.shortlist._id == id) {
         this.handleRenameClick();
-        this.getData(this.props.shortlist._id);
+        this.getData();
       }
     });
   }
 
-  getData(listId) {
+  getData() {
+    const listId = this.props.shortlist._id;
     axios.get('http://localhost:3003/api/list/' + listId)
       .then( response => {
         const shortlist = response.data;

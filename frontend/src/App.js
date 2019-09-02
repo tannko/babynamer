@@ -9,7 +9,7 @@ import Navbar from './Navbar';
 class App extends Component {
   constructor() {
     super();
-    this.state = {gender: '', isNameListOver: false, chosenNames: new Map([]), listname: "My Shortlist"};
+    this.state = {gender: '', isNameListOver: false, chosenNames: new Map([]), listname: ""};
     this.genderClick = this.genderClick.bind(this);
     this.backClick = this.backClick.bind(this);
     this.endNameSorted = this.endNameSorted.bind(this);
