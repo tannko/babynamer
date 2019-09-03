@@ -69,7 +69,11 @@ class ModalList extends React.Component {
     });
   }
 
-
+  componentWillUnmount() {
+    socket.off('listIsUpdated');
+    socket.off('listRemoved');
+    socket.off('listRenamed');
+  }
 
   getData() {
     const listId = this.props.shortlist._id;
