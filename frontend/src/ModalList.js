@@ -69,6 +69,8 @@ class ModalList extends React.Component {
     });
   }
 
+
+
   getData() {
     const listId = this.props.shortlist._id;
     axios.get('http://localhost:3003/api/list/' + listId)
