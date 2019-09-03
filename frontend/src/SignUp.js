@@ -14,6 +14,18 @@ class SignUp extends React.Component {
     this.signupHandleClick = this.signupHandleClick.bind(this);
     this.signinHandleClick = this.signinHandleClick.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.submitHandler = this.submitHandler.bind(this);
+  }
+
+  submitHandler = event => {
+    event.preventDefault();
+    event.target.className += " was-validated";
+    if (this.state.name.trim() !== ""
+      && this.state.email.trim() !== ""
+      && this.state.password.trim() != ""
+    ) {
+      this.signupHandleClick();
+    }
   }
 
   signupHandleClick() {
@@ -50,6 +62,10 @@ class SignUp extends React.Component {
   render() {
     return (
     <MDBContainer className="min-vh-100">
+      <form
+        className="needs-validation"
+        onSubmit={this.submitHandler}
+        noValidate>
       <MDBRow className="d-flex justify-content-center min-vh-100 align-items-center">
         <MDBCol md="6">
           <MDBCard>
@@ -66,30 +82,44 @@ class SignUp extends React.Component {
                 label="Your name"
                 group
                 type="text"
-                validate
                 containerClass="mb-0"
-                onInput={this.handleInput}/>
+                onInput={this.handleInput}
+                required
+                pattern="\w+">
+              <div className="invalid-feedback">
+                Please enter valid name. Valid name can contain letters, numbers and underscore.
+              </div>
+              </MDBInput>
               <MDBInput
                 name="email"
                 label="Your email"
                 group type="text"
-                validate
-                onInput={this.handleInput}/>
+                onInput={this.handleInput}
+                required
+                pattern="\S+">
+              <div className="invalid-feedback">
+                Please enter email
+              </div>
+              </MDBInput>
               <MDBInput
                 name="password"
                 label="Your password"
                 group
                 type="password"
-                validate
                 containerClass="mb-0"
                 onInput={this.handleInput}
-              />
+                required
+                pattern="\S+">
+              <div className="invalid-feedback">
+                Please enter password
+              </div>
+              </MDBInput>
               <div className="text-center mb-4 mt-5">
                 <MDBBtn
                   color="danger"
                   type="button"
                   className="btn-block z-depth-2"
-                  onClick={this.signupHandleClick}
+                  type="submit"
                 >
                   Sign up
                 </MDBBtn>
@@ -107,6 +137,7 @@ class SignUp extends React.Component {
           </MDBCard>
         </MDBCol>
       </MDBRow>
+      </form>
     </MDBContainer>
     );
   }

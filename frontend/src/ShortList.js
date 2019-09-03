@@ -66,7 +66,8 @@ class ShortList extends React.Component {
   submitHandler = event => {
     event.preventDefault();
     event.target.className += " was-validated";
-    if (this.props.name.trim() !== "") {
+    const regex = /\w+/;
+    if (this.props.name.trim() !== "" && regex.test(this.props.name.trim())) {
       this.saveClick();
     }
   }
@@ -98,7 +99,7 @@ class ShortList extends React.Component {
                 <MDBCardTitle className="text-center">
                   <MDBInput label="Your list name" size="lg" name="title" onInput={this.handleInput} required pattern="\w+">
                     <div className="invalid-feedback">
-                      Please add list name. List name can contain letters, numbers and underscore.
+                      Please add valid list name. List name can contain letters, numbers and underscore.
                     </div>
                   </MDBInput>
                 </MDBCardTitle>
