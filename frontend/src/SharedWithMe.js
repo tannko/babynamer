@@ -7,6 +7,7 @@ import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
+import { socket } from './socket_api';
 
 
 class SharedWithMe extends React.Component {
@@ -25,6 +26,16 @@ class SharedWithMe extends React.Component {
 
   componentDidMount() {
     this.getData();
+
+    socket.on('listShared', params => {
+      if (params.userId === getUser()._id) {
+        this.getData();
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    socket.off('listShared');
   }
 
   getData() {

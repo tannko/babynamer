@@ -67,12 +67,19 @@ class ModalList extends React.Component {
         this.getData();
       }
     });
+    socket.on('listShared', params => {
+      if (this.props.shortlist._id == params.listId) {
+        this.handleShareClick();
+        this.getData();
+      }
+    })
   }
 
   componentWillUnmount() {
     socket.off('listIsUpdated');
     socket.off('listRemoved');
     socket.off('listRenamed');
+    socket.off('listShared');
   }
 
   getData() {
@@ -176,7 +183,7 @@ class ModalList extends React.Component {
       email: email,
       list: [...nameslist]
     };
-    axios.post('http://localhost:3003/api/share', params)
+    /*axios.post('http://localhost:3003/api/share', params)
       .then( response => {
         // close share window
         // update shortlist modal
@@ -186,6 +193,8 @@ class ModalList extends React.Component {
       .catch( error => {
 
       });
+    */
+    socket.emit("share", params);
   }
 
   unshare() {

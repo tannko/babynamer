@@ -264,7 +264,7 @@ router.post('/share', (req, res) => {
       } else {
         console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
         res.status(200).send('shared');
-        io.sockets.emit("listShared", id);
+        //io.sockets.emit("listShared", id);
       }
     });
   });
@@ -393,6 +393,44 @@ io.on('connection', socket => {
         io.sockets.emit("listRenamed", id);
         //res.status(200).send('updated');
       }
+    });
+  });
+
+  socket.on("share", params => {
+    const email = params.email;
+    const id = params.id;
+    const nameslist = params.list;
+    User.findOne({ email: email }, ( err, user ) => {
+      if (err) {
+        console.log('error looking for user with email ' + email);
+        res.status(400).send('error looking for user with email ' + email);
+      }
+
+      if (!user) {
+        console.log('user with email ' + email + ' is not found');
+        res.status(400).send('user with email ' + email + ' is not found');
+      }
+
+      const partner = {
+        id: user._id,
+        name: user.name,
+        list: new Map([...nameslist]),
+        isUpdated: false
+      };
+      Shortlist.updateOne({ _id: id }, { status: 1, partner: partner }, (err, updres) => {
+        if (err) {
+          console.log('share list error: ' + err);
+          //res.status(400).send('share list error');
+        } else {
+          console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+          //res.status(200).send('shared');
+          const resultParams = {
+            listId: id,
+            userId: user._id
+          };
+          io.sockets.emit("listShared", resultParams);
+        }
+      });
     });
   })
 });
