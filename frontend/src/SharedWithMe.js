@@ -52,10 +52,10 @@ class SharedWithMe extends React.Component {
       });
   }
 
-  rerender() {
+  /*rerender() {
     //change it later with sockets
     this.getData();
-  }
+  }*/
 
   handleListClick() {
     this.setState({ editListMode: true });
@@ -101,7 +101,7 @@ class SharedWithMe extends React.Component {
       if (status === 1) {
         invitations.push(
           <MDBCol md="4">
-            <Invitation list={list} accept={this.accept} decline={this.decline} />
+            <Invitation list={list} accept={() => this.accept(list._id)} decline={() => this.decline(list._id)} />
           </MDBCol>
         );
       } else if (status === 2) {
