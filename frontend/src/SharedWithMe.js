@@ -19,12 +19,10 @@ class SharedWithMe extends React.Component {
       isInvitationsOpen: false,
       user: getUser()
     };
-    //this.rerender = this.rerender.bind(this);
     this.handleInvitationsClick = this.handleInvitationsClick.bind(this);
     this.getData = this.getData.bind(this);
     this.accept = this.accept.bind(this);
     this.decline = this.decline.bind(this);
-    //this.updateRating = this.updateRating.bind(this);
   }
 
   componentDidMount() {
@@ -52,11 +50,6 @@ class SharedWithMe extends React.Component {
       });
   }
 
-  /*rerender() {
-    //change it later with sockets
-    this.getData();
-  }*/
-
   handleListClick() {
     this.setState({ editListMode: true });
   }
@@ -66,7 +59,6 @@ class SharedWithMe extends React.Component {
   }
 
   accept(listId) {
-    //const user = getUser();
     const params = {
       id: listId,
       user: this.state.user._id
@@ -81,7 +73,6 @@ class SharedWithMe extends React.Component {
   }
 
   decline(listId) {
-    //const user = getUser();
     axios.post('http://localhost:3003/api/unshare', { id: listId })
       .then( response => {
         this.getData();

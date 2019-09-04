@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { MDBNavbar, MDBNavbarBrand, MDBCollapse, MDBNavbarNav, MDBNavItem, MDBNavLink } from 'mdbreact';
 import { MDBDropdown, MDBDropdownToggle, MDBIcon, MDBDropdownMenu, MDBDropdownItem } from 'mdbreact';
 import { MDBNavbarToggler } from 'mdbreact';
-import { logout } from './utils';
+import { getUserName, logout } from './utils';
 
 class Navbar extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class Navbar extends Component {
             <MDBNavItem>
               <MDBDropdown>
                 <MDBDropdownToggle nav caret>
-                  <MDBIcon icon="user" />
+                  <MDBIcon icon="user" > {getUserName()}</MDBIcon>
                 </MDBDropdownToggle>
                 <MDBDropdownMenu className="drowdown-default">
                   <MDBDropdownItem href="/" onClick={this.handleLogoutClick}>Logout</MDBDropdownItem>
