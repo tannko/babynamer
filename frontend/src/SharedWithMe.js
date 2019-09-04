@@ -16,11 +16,14 @@ class SharedWithMe extends React.Component {
     this.state = {
       sharedLists: [],
       timestamp: 0,
-      isInvitationsOpen: false
+      isInvitationsOpen: false,
+      user: getUser()
     };
-    this.rerender = this.rerender.bind(this);
+    //this.rerender = this.rerender.bind(this);
     this.handleInvitationsClick = this.handleInvitationsClick.bind(this);
     this.getData = this.getData.bind(this);
+    this.accept = this.accept.bind(this);
+    this.decline = this.decline.bind(this);
     //this.updateRating = this.updateRating.bind(this);
   }
 
@@ -39,8 +42,8 @@ class SharedWithMe extends React.Component {
   }
 
   getData() {
-    const user = getUser();
-    axios.get('http://localhost:3003/api/shared/' + user._id)
+    //const user = getUser();
+    axios.get('http://localhost:3003/api/shared/' + this.state.user._id)
       .then( response => {
         this.setState({ sharedLists: response.data });
       })
@@ -62,6 +65,32 @@ class SharedWithMe extends React.Component {
     this.setState({ isInvitationsOpen: !this.state.isInvitationsOpen });
   }
 
+  accept(listId) {
+    //const user = getUser();
+    const params = {
+      id: listId,
+      user: this.state.user._id
+    };
+    axios.post('http://localhost:3003/api/accept', params)
+      .then( response => {
+        this.getData();
+      })
+      .catch( error => {
+
+      });
+  }
+
+  decline(listId) {
+    //const user = getUser();
+    axios.post('http://localhost:3003/api/unshare', { id: listId })
+      .then( response => {
+        this.getData();
+      })
+      .catch( error => {
+
+      });
+  }
+
   render() {
     const isInvitationsOpen = this.state.isInvitationsOpen;
     const accepted = [];
@@ -72,7 +101,7 @@ class SharedWithMe extends React.Component {
       if (status === 1) {
         invitations.push(
           <MDBCol md="4">
-            <Invitation list={list} rerender={this.rerender} />
+            <Invitation list={list} accept={this.accept} decline={this.decline} />
           </MDBCol>
         );
       } else if (status === 2) {

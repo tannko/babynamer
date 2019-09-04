@@ -12,7 +12,8 @@ class Invitation extends React.Component {
   }
 
   handleDeclineClick() {
-    const user = getUser();
+    this.props.decline(this.props.list._id);
+    /*const user = getUser();
     axios.post('http://localhost:3003/api/unshare', { id: this.props.list._id })
       .then( response => {
         // update state to re-render component
@@ -21,10 +22,12 @@ class Invitation extends React.Component {
       .catch( error => {
 
       });
+      */
   }
 
   handleAcceptClick() {
-    const user = getUser();
+    this.props.accept(this.props.list._id);
+    /*const user = getUser();
     const params = {
       id: this.props.list._id,
       user: user._id
@@ -36,7 +39,7 @@ class Invitation extends React.Component {
       })
       .catch( error => {
 
-      });
+      });*/
   }
 
   render() {
