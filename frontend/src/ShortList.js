@@ -11,11 +11,17 @@ import { socket } from './socket_api';
 class ShortList extends React.Component {
   constructor(props) {
     super(props);
+    this.nameInput = React.createRef();
     this.saveClick = this.saveClick.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
     this.starClick = this.starClick.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
+    this.focusNameInput = this.focusNameInput.bind(this);
+  }
+
+  componentDidMount() {
+    this.focusNameInput();
   }
 
   handleInput(e) {
@@ -47,7 +53,7 @@ class ShortList extends React.Component {
       })
       .catch(err => {
         // show modal about error with saving
-        console.log(err);
+        //console.log(err);
        });
 
   }
@@ -70,6 +76,10 @@ class ShortList extends React.Component {
     if (this.props.name.trim() !== "" && regex.test(this.props.name.trim())) {
       this.saveClick();
     }
+  }
+
+  focusNameInput() {
+    this.nameInput.focus();
   }
 
   render() {
@@ -97,7 +107,7 @@ class ShortList extends React.Component {
             <MDBCard>
               <MDBCardBody className="text-center">
                 <MDBCardTitle className="text-center">
-                  <MDBInput label="Your list name" size="lg" name="title" onInput={this.handleInput} required pattern="\w+">
+                  <MDBInput inputRef={ref => this.nameInput = ref} label="Your list name" size="lg" name="title" onInput={this.handleInput} required pattern="\w+">
                     <div className="invalid-feedback">
                       Please add valid list name. List name can contain letters, numbers and underscore.
                     </div>
