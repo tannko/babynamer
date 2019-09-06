@@ -117,7 +117,7 @@ class SharedWithMe extends React.Component {
               <MDBCollapse id="invitations" isOpen={this.state.isInvitationsOpen}>
                 <MDBCardBody>
                   <div class="card-deck">
-                    { invitationsQty == 0 ? "You have 0 invitations" : invitations }
+                    { invitationsQty == 0 ? <MDBCard className="text-center"><MDBCardBody>You have 0 invitations</MDBCardBody></MDBCard> : invitations }
                   </div>
                 </MDBCardBody>
               </MDBCollapse>
