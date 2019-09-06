@@ -193,9 +193,6 @@ router.post('/updateList', (req, res) => {
   const id = req.body.id;
   const list = new Map(req.body.list);
   const field = req.body.editor + '.list';
-  //console.log('id: ' + id);
-  //console.log('field: ' + field);
-  //console.log('list: ' + JSON.stringify(list));
   Shortlist.updateOne({ _id: id }, { [field]: list }, (err, updres) => {
     if (err) {
       console.log('update list error: ' + err);
@@ -432,6 +429,35 @@ io.on('connection', socket => {
         }
       });
     });
-  })
+  });
+
+  socket.on("update", params => {
+    const id = params.id;
+    const list = new Map(params.list);
+    const field = params.editor + '.list';
+    const flag = params.editor + '.isUpdated';
+    Shortlist.updateOne({ _id: id }, { [field]: list, [flag]: true }, (err, updres) => {
+      if (err) {
+        console.log('update rating error: ' + err);
+      } else {
+        console.log('rating update: matched: ' + updres.n + "; modified: " + updres.nModified);
+        io.sockets.emit('ratingUpdated', id);
+      }
+    });
+  });
+
+  socket.on("updateViewed", params => {
+    const id = params.id;
+    const flag = params.updateOwner + '.isUpdated';
+    Shortlist.updateOne({ _id: id }, { [flag]: false }, (err, updres) => {
+      if (err) {
+        console.log('update flag error: ' + err);
+      } else {
+        console.log('flag update: matched: ' + updres.n + "; modified: " + updres.nModified);
+        io.sockets.emit('flagUpdated', id);
+      }
+    });
+  });
+
 });
 server.listen(API_PORT);

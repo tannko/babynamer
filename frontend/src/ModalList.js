@@ -28,8 +28,7 @@ class ModalList extends React.Component {
       updatedList: new Map(),
       shortlist: {},
       activeItem: "1",
-      //sharedWithUser: null,
-      isUpdated: false
+      isCommonRatingUpdated: false
     }
     this.toggle = this.toggle.bind(this);
     this.updateRating = this.updateRating.bind(this);
@@ -42,7 +41,6 @@ class ModalList extends React.Component {
     this.unshare = this.unshare.bind(this);
     this.rename = this.rename.bind(this);
     this.remove = this.remove.bind(this);
-    this.setUpdateIcon = this.setUpdateIcon.bind(this);
     this.getData = this.getData.bind(this);
   }
 
@@ -72,7 +70,18 @@ class ModalList extends React.Component {
         this.handleShareClick();
         this.getData();
       }
-    })
+    });
+    socket.on('ratingUpdated', id => {
+      if (this.props.shortlist._id === id) {
+        //this.setState({ isCommonRatingUpdated: true });
+        this.getData();
+      }
+    });
+    socket.on('flagUpdated', id => {
+      if (this.props.shortlist._id === id) {
+        this.getData();
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -80,6 +89,8 @@ class ModalList extends React.Component {
     socket.off('listRemoved');
     socket.off('listRenamed');
     socket.off('listShared');
+    socket.off('ratingUpdated');
+    socket.off('flagUpdated');
   }
 
   getData() {
@@ -96,16 +107,18 @@ class ModalList extends React.Component {
         }
         this.setState({ initialList: nameslist, updatedList: nameslist });
 
+
+        if ((this.props.editor === 'partner' && shortlist.owner.isUpdated)
+              || (this.props.editor === 'owner' && shortlist.partner.isUpdated )){
+          this.setState({ isCommonRatingUpdated: true });
+        } else {
+          this.setState({ isCommonRatingUpdated: false });
+        }
+
       })
       .catch( error => {
 
       });
-  }
-
-  setUpdateIcon(updatedId) {
-    if (this.props.shortlist._id == updatedId) {
-      this.setState({ isUpdated: true });
-    }
   }
 
   toggle = () => {
@@ -123,6 +136,13 @@ class ModalList extends React.Component {
   toggleRating = tab => e => {
     if (this.state.activeItem !== tab) {
       this.setState({ activeItem: tab });
+    }
+    if (this.state.activeItem === "2" && this.state.isCommonRatingUpdated) {
+        const params = {
+          id: this.props.shortlist._id,
+          updateOwner: this.props.editor === 'partner' ? 'owner' : 'partner'
+        };
+        socket.emit('updateViewed', params);
     }
   }
 
@@ -161,14 +181,7 @@ class ModalList extends React.Component {
         editor: this.props.editor,
         list: [...this.state.updatedList]
       };
-    axios.post('http://localhost:3003/api/updateList', params)
-      .then( res => {
-        // show modal that list succesfully updated
-      })
-      .catch( err => {
-        // show modal about error
-      });
-    //}
+    socket.emit("update", params);
   }
 
 
@@ -183,17 +196,6 @@ class ModalList extends React.Component {
       email: email,
       list: [...nameslist]
     };
-    /*axios.post('http://localhost:3003/api/share', params)
-      .then( response => {
-        // close share window
-        // update shortlist modal
-        this.handleShareClick();
-        this.getData(this.props.shortlist._id);
-      })
-      .catch( error => {
-
-      });
-    */
     socket.emit("share", params);
   }
 
@@ -216,15 +218,6 @@ class ModalList extends React.Component {
       id: this.props.shortlist._id,
       name: newname
     };
-    /*axios.post('http://localhost:3003/api/rename', params)
-      .then( response => {
-        this.handleRenameClick();
-        this.getData(this.props.shortlist._id);
-      })
-      .catch( error => {
-        // TBD
-      });
-    */
     socket.emit("rename", params);
   }
 
@@ -233,22 +226,12 @@ class ModalList extends React.Component {
       id: this.props.shortlist._id
     };
     socket.emit("remove", this.props.shortlist._id);
-    /*axios.post('http://localhost:3003/api/remove', params)
-      .then( response => {
-        this.handleRemoveClick();
-        this.toggle();
-        this.props.updateAll();
-      })
-      .catch( error => {
-        // TBD
-      });*/
-    //socket.on("listRemoved", this.onRemoved);
   }
 
   render() {
     const shortlist = this.state.shortlist;
     const isShared = shortlist.partner == null ? false : true;
-    const isUpdated = this.state.isUpdated;
+    const isCommonRatingUpdated = this.state.isCommonRatingUpdated;
     const partner = shortlist.partner == null ? null : shortlist.partner.name;
     const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + partner }</div> : "";
     const upperDiv = this.props.editor === 'owner' ?
@@ -280,7 +263,7 @@ class ModalList extends React.Component {
                             disabled={shortlist.partner === null}
                             onClick={this.toggleRating("2")}
                             role="tab">
-                  Common Rating
+                  Common Rating { isCommonRatingUpdated && <MDBBadge pill color="info">New</MDBBadge> }
                 </MDBNavLink>
               </MDBNavItem>
             </MDBNav>
@@ -317,7 +300,7 @@ class ModalList extends React.Component {
           <MDBCardHeader>
 
             <div className="d-flex justify-content-end">
-              { isUpdated &&
+              { isCommonRatingUpdated &&
               <MDBBadge color="default">
                 <MDBIcon icon="envelope-open-text" size="2x" />
               </MDBBadge>

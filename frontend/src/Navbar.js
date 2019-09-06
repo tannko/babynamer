@@ -46,7 +46,7 @@ class Navbar extends Component {
             <MDBNavItem>
               <MDBDropdown>
                 <MDBDropdownToggle nav caret>
-                  <MDBIcon icon="user" > {getUserName()}</MDBIcon>
+                  <MDBIcon icon="user"> { getUserName() }</MDBIcon>
                 </MDBDropdownToggle>
                 <MDBDropdownMenu className="drowdown-default">
                   <MDBDropdownItem href="/" onClick={this.handleLogoutClick}>Logout</MDBDropdownItem>
