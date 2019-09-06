@@ -359,10 +359,15 @@ io.on('connection', socket => {
     Shortlist.updateOne({ _id: shortlist._id }, shortlist, (err, updres) => {
       if (err) {
         console.log('update list error: ' + err);
-        //emit error event?
+        const params = {
+          id: shortlist._id,
+          error: err
+        };
+        io.sockets.emit('error', params);
+      } else {
+        console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
+        io.sockets.emit("listIsUpdated", shortlist._id);
       }
-      console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-      io.sockets.emit("listIsUpdated", shortlist._id);
     });
   });
 
@@ -370,6 +375,11 @@ io.on('connection', socket => {
     Shortlist.deleteOne({ _id: id }, (err, removeres) => {
       if (err) {
         console.log('remove list error:' + err);
+        const params = {
+          id: id,
+          error: err
+        };
+        io.sockets.emit('error', params);
       } else {
         console.log('removed: ' + removeres.deletedCount);
         io.sockets.emit("listRemoved", id);
@@ -384,7 +394,11 @@ io.on('connection', socket => {
     Shortlist.updateOne({ _id: id }, { name: name }, (err, updres) => {
       if (err) {
         console.log('rename list error: ' + err);
-        //res.status(400).send('rename list error');
+        const params = {
+          id: id,
+          error: err
+        };
+        io.sockets.emit('error', params);
       } else {
         console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
         io.sockets.emit("listRenamed", id);
@@ -400,12 +414,20 @@ io.on('connection', socket => {
     User.findOne({ email: email }, ( err, user ) => {
       if (err) {
         console.log('error looking for user with email ' + email);
-        res.status(400).send('error looking for user with email ' + email);
+        const params = {
+          id: id,
+          error: err
+        };
+        io.sockets.emit('error', params);
       }
 
       if (!user) {
         console.log('user with email ' + email + ' is not found');
-        res.status(400).send('user with email ' + email + ' is not found');
+        const params = {
+          id: id,
+          error: 'user with email ' + email + ' is not found'
+        };
+        io.sockets.emit('error', params);
       }
 
       const partner = {
@@ -417,7 +439,11 @@ io.on('connection', socket => {
       Shortlist.updateOne({ _id: id }, { status: 1, partner: partner }, (err, updres) => {
         if (err) {
           console.log('share list error: ' + err);
-          //res.status(400).send('share list error');
+          const params = {
+            id: id,
+            error: err
+          };
+          io.sockets.emit('error', params);
         } else {
           console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
           //res.status(200).send('shared');
@@ -439,6 +465,7 @@ io.on('connection', socket => {
     Shortlist.updateOne({ _id: id }, { [field]: list, [flag]: true }, (err, updres) => {
       if (err) {
         console.log('update rating error: ' + err);
+        io.sockets.emit('error', { id: id, error: err });
       } else {
         console.log('rating update: matched: ' + updres.n + "; modified: " + updres.nModified);
         io.sockets.emit('ratingUpdated', id);
@@ -452,6 +479,7 @@ io.on('connection', socket => {
     Shortlist.updateOne({ _id: id }, { [flag]: false }, (err, updres) => {
       if (err) {
         console.log('update flag error: ' + err);
+        io.sockets.emit('error', { id: id, error: err });
       } else {
         console.log('flag update: matched: ' + updres.n + "; modified: " + updres.nModified);
         io.sockets.emit('flagUpdated', id);

@@ -29,7 +29,8 @@ class ModalList extends React.Component {
       updatedList: new Map(),
       shortlist: {},
       activeItem: "1",
-      isCommonRatingUpdated: false
+      isCommonRatingUpdated: false,
+      error: ""
     }
     this.toggle = this.toggle.bind(this);
     this.updateRating = this.updateRating.bind(this);
@@ -52,7 +53,6 @@ class ModalList extends React.Component {
     //const listId = this.props.shortlist._id;
     this.getData();
 
-    socket.on('listIsUpdated', this.setUpdateIcon);
     socket.on('listRemoved', id => {
       if (this.props.shortlist._id === id) {
         this.handleRemoveClick();
@@ -83,15 +83,20 @@ class ModalList extends React.Component {
         this.getData();
       }
     });
+    socket.on('error', params => {
+      if (this.props.shortlist._id === params.id) {
+        this.setState({ error: params.errorMessage });
+      }
+    })
   }
 
   componentWillUnmount() {
-    socket.off('listIsUpdated');
     socket.off('listRemoved');
     socket.off('listRenamed');
     socket.off('listShared');
     socket.off('ratingUpdated');
     socket.off('flagUpdated');
+    socket.off('error');
   }
 
   getData() {
@@ -116,9 +121,10 @@ class ModalList extends React.Component {
           this.setState({ isCommonRatingUpdated: false });
         }
 
+        this.setState({ error: "" });
       })
       .catch( error => {
-
+        this.setState({ error: error });
       });
   }
 
@@ -234,7 +240,14 @@ class ModalList extends React.Component {
     const isShared = shortlist.partner == null ? false : true;
     const isCommonRatingUpdated = this.state.isCommonRatingUpdated;
     const partner = shortlist.partner == null ? null : shortlist.partner.name;
-    const sharedMessage = isShared ? <div className="d-flex flex-grow-1 justify-content-center">{ "You shared this list with " + partner }</div> : "";
+    const sharedMessage =
+                  isShared ?
+                  <div className="d-flex flex-grow-1 justify-content-center">
+                      { "You shared this list with " + partner }
+                  </div>
+                    :
+                  <div className="d-flex flex-grow-1"></div>;
+    const isError = this.state.error === "" ? false : true;
     const upperDiv =
             this.props.editor === 'owner' ?
                                             <div>
@@ -249,7 +262,7 @@ class ModalList extends React.Component {
                                               </div>
 
                                             </div>
-                                            <div className="d-flex"><ErrorMessage /></div>
+                                            { isError && <div className="d-flex"><ErrorMessage message={this.state.error}/></div>}
                                             </div>
                                           : <div></div>;
 

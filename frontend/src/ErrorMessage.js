@@ -12,7 +12,7 @@ class ErrorMessage extends React.Component {
       <MDBCard>
         <MDBCardBody>
           <MDBCardTitle className="text-danger">ERROR</MDBCardTitle>
-          <MDBCardText>Here will be error message from props</MDBCardText>
+          <MDBCardText>{this.props.message}</MDBCardText>
         </MDBCardBody>
       </MDBCard>
     );
