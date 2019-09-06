@@ -15,6 +15,7 @@ import UnshareModal from './UnshareModal';
 import { socket } from './socket_api';
 import { objectToMap } from './utils';
 import CommonRating from './CommonRating';
+import ErrorMessage from './ErrorMessage';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -233,17 +234,25 @@ class ModalList extends React.Component {
     const isShared = shortlist.partner == null ? false : true;
     const isCommonRatingUpdated = this.state.isCommonRatingUpdated;
     const partner = shortlist.partner == null ? null : shortlist.partner.name;
-    const sharedMessage = isShared ? <div className="mr-auto">{ "You shared this list with " + partner }</div> : "";
-    const upperDiv = this.props.editor === 'owner' ?
-            <div className="d-flex mb-3">
-              { sharedMessage }
-              <div className="ml-auto">
-                <DropdownMenu share={ isShared ? this.handleUnshareClick : this.handleShareClick }
-                    rename={this.handleRenameClick}
-                    remove={this.handleRemoveClick}
-                    isShared={isShared} />
-                </div></div> :
-              <div></div>;
+    const sharedMessage = isShared ? <div className="d-flex flex-grow-1 justify-content-center">{ "You shared this list with " + partner }</div> : "";
+    const upperDiv =
+            this.props.editor === 'owner' ?
+                                            <div>
+                                            <div className="d-flex align-items-center">
+                                              { sharedMessage }
+                                              <div className="d-flex justify-content-right">
+                                                <DropdownMenu
+                                                  share={ isShared ? this.handleUnshareClick : this.handleShareClick }
+                                                  rename={this.handleRenameClick}
+                                                  remove={this.handleRemoveClick}
+                                                  isShared={isShared} />
+                                              </div>
+
+                                            </div>
+                                            <div className="d-flex"><ErrorMessage /></div>
+                                            </div>
+                                          : <div></div>;
+
     return (
       <MDBContainer>
 
@@ -296,9 +305,8 @@ class ModalList extends React.Component {
         <a href="#" onClick={this.toggle}>
         <MDBCard className="mt-3">
 
-          { isShared &&
           <MDBCardHeader>
-
+            { isShared ?
             <div className="d-flex justify-content-end">
               { isCommonRatingUpdated &&
               <MDBBadge color="default">
@@ -308,8 +316,13 @@ class ModalList extends React.Component {
               <MDBBadge color="warning">
                 <MDBIcon icon="share-alt" size="2x" />
               </MDBBadge>
-            </div>
-        </MDBCardHeader> }
+            </div> :
+            <div className="d-flex justify-content-end">
+              <MDBBadge color="primary">
+                <MDBIcon icon="lock" size="2x"/>
+              </MDBBadge>
+            </div>}
+        </MDBCardHeader>
 
           <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"/>
             <MDBCardBody>
