@@ -7,6 +7,7 @@ import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
+import ErrorMessage from './ErrorMessage';
 import { socket } from './socket_api';
 
 
@@ -17,7 +18,8 @@ class SharedWithMe extends React.Component {
       sharedLists: [],
       timestamp: 0,
       isInvitationsOpen: false,
-      user: getUser()
+      user: getUser(),
+      error: ""
     };
     this.handleInvitationsClick = this.handleInvitationsClick.bind(this);
     this.getData = this.getData.bind(this);
@@ -43,16 +45,16 @@ class SharedWithMe extends React.Component {
 
   componentWillUnmount() {
     socket.off('listShared');
+    socket.off('listUnshared');
   }
 
   getData() {
-    //const user = getUser();
     axios.get('http://localhost:3003/api/shared/' + this.state.user._id)
       .then( response => {
-        this.setState({ sharedLists: response.data });
+        this.setState({ sharedLists: response.data, error: "" });
       })
       .catch( error => {
-        // show modal with error message
+        this.setState({ error: error });
       });
   }
 
@@ -74,7 +76,7 @@ class SharedWithMe extends React.Component {
         this.getData();
       })
       .catch( error => {
-
+        this.setState({ error: error });
       });
   }
 
@@ -84,7 +86,7 @@ class SharedWithMe extends React.Component {
         this.getData();
       })
       .catch( error => {
-
+        this.setState({ error: error });
       });
   }
 
@@ -111,12 +113,14 @@ class SharedWithMe extends React.Component {
     });
     const invitationsQty = invitations.length;
     const badgeQty = <MDBBadge pill color="danger" className="ml-2">{invitationsQty}</MDBBadge>;
+    const isError = this.state.error === "" ? false : true;
     return (
       <MDBContainer>
         <Navbar activeItem="shared"/>
+        { isError && <div><ErrorMessage message={this.state.error}/></div> }
         <MDBRow>
           <MDBCol>
-            <MDBCard className="mt-3">
+            <MDBCard>
               <MDBCardHeader onClick={this.handleInvitationsClick}>
                 {invitationsQty == 0 ? "" : badgeQty} Invitations <MDBIcon icon={isInvitationsOpen ? "angle-up" : "angle-down"} />
               </MDBCardHeader>

@@ -7,26 +7,17 @@ import { getUser } from './utils';
 import ShortList from './ShortList';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
+import ErrorMessage from './ErrorMessage';
 import { socket } from './socket_api';
 
 class MyLists extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { lists: [] };
+    this.state = { lists: [], error: "" };
     this.getData = this.getData.bind(this);
-    //this.updateRating = this.updateRating.bind(this);
   }
 
   componentDidMount() {
-    /*const user = getUser();
-    // change function to get only id and names of lists
-    axios.get('http://localhost:3003/api/lists/' + user._id)
-      .then( response => {
-        this.setState({ lists: response.data });
-      })
-      .catch( error => {
-
-      });*/
     this.getData();
 
   }
@@ -35,26 +26,12 @@ class MyLists extends React.Component {
     const user = getUser();
     axios.get('http://localhost:3003/api/lists/' + user._id)
       .then( response => {
-        this.setState({ lists: response.data });
+        this.setState({ lists: response.data, error: "" });
       })
       .catch( error => {
-
+        this.setState({ error: error });
       });
   }
-/*
-  updateInfo(owner) {
-    const user = getUser();
-    if (owner._id == user._id) {
-      axios.get('http://localhost:3003/api/lists/' + user._id)
-        .then( response => {
-          this.setState({ lists: response.data });
-        })
-        .catch( error => {
-
-        });
-    }
-  }
-*/
 
   render() {
     const qty = this.state.lists.length;
@@ -62,6 +39,7 @@ class MyLists extends React.Component {
     const btnStyle = {
       'border-radius' : '50%'
     };
+    const isError = this.state.error === "" ? false : true;
     this.state.lists.forEach( list => {
       rows.push(
         <MDBCol md="4">
@@ -72,9 +50,18 @@ class MyLists extends React.Component {
     return(
       <MDBContainer className="min-vh-100 align-items-center justify-content-center">
         <Navbar activeItem="lists"/>
-        <div className="card-deck">
-          {rows}
-        </div>
+        { isError && <div><ErrorMessage message={this.state.error}/></div> }
+        <MDBRow>
+          <MDBCol>
+            <MDBCard>
+              <MDBCardBody>
+                <div className="card-deck">
+                  {rows}
+                </div>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
       </MDBContainer>
     );
   }
