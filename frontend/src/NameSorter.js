@@ -71,7 +71,7 @@ class NameSorter extends React.Component {
         <MDBRow className="min-vh-100 align-items-center justify-content-center">
           <MDBCol >
             <MDBCard>
-              <MDBCardHeader className="d-flex justify-content-end">
+              <MDBCardHeader className="d-flex align-items-center justify-content-end">
                 <div class="mr-auto">{this.state.errorMessage}</div>
                 <MDBBtn onClick={this.stopClick}>SAVE</MDBBtn>
               </MDBCardHeader>
