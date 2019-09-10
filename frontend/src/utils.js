@@ -39,3 +39,15 @@ export const objectToMap = (object) => {
     }
     return map;
 }
+
+export const areMapsEqual = (map1, map2) => {
+  if (map1.size !== map2.size) {
+    return false;
+  }
+  map1.forEach((rating, name) => {
+    if (map2.get(name) !== rating) {
+      return false;
+    }
+  });
+  return true;
+}

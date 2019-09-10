@@ -4,7 +4,7 @@ import { MDBContainer, MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } 
 import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from 'mdbreact';
 import { MDBBtn, MDBRow, MDBIcon, MDBCardHeader, MDBBadge } from 'mdbreact';
 import { MDBDropdown, MDBDropdownMenu, MDBDropdownItem, MDBDropdownToggle } from 'mdbreact';
-import { MDBTabContent, MDBTabPane, MDBNav, MDBNavItem, MDBNavLink } from 'mdbreact';
+import { MDBTabContent, MDBTabPane, MDBNav, MDBNavItem, MDBNavLink, MDBTooltip } from 'mdbreact';
 import ShortList from './ShortList';
 import ShortlistBody from './ShortlistBody';
 import ShareModal from './ShareModal';
@@ -13,7 +13,7 @@ import RemoveModal from './RemoveModal';
 import DropdownMenu from './DropdownMenu';
 import UnshareModal from './UnshareModal';
 import { socket } from './socket_api';
-import { objectToMap } from './utils';
+import { objectToMap, areMapsEqual } from './utils';
 import CommonRating from './CommonRating';
 import ErrorMessage from './ErrorMessage';
 
@@ -72,6 +72,12 @@ class ModalList extends React.Component {
         this.getData();
       }
     });
+    socket.on('listUnshared', id => {
+      if (this.props.shortlist._id === id) {
+        this.handleUnshareClick();
+        this.getData();
+      }
+    });
     socket.on('ratingUpdated', id => {
       if (this.props.shortlist._id === id) {
         //this.setState({ isCommonRatingUpdated: true });
@@ -105,23 +111,31 @@ class ModalList extends React.Component {
       .then( response => {
         const shortlist = response.data;
         this.setState({ shortlist: shortlist });
-        let nameslist;
-        if (this.props.editor === 'partner') {
+        let nameslist = new Map();
+        if (this.props.editor === 'partner' && shortlist.partner
+              && !areMapsEqual(this.state.initialList, shortlist.partner.list)) {
           nameslist = objectToMap(shortlist.partner.list);
-        } else {
+        }
+        if (this.props.editor === 'owner'
+            && !areMapsEqual(this.state.initialList, shortlist.owner.list)) {
           nameslist = objectToMap(shortlist.owner.list);
         }
         this.setState({ initialList: nameslist, updatedList: nameslist });
 
 
-        if ((this.props.editor === 'partner' && shortlist.owner.isUpdated)
+        if ((this.props.editor === 'partner' && shortlist.partner && shortlist.owner.isUpdated)
               || (this.props.editor === 'owner' && shortlist.partner && shortlist.partner.isUpdated )){
           this.setState({ isCommonRatingUpdated: true });
         } else {
           this.setState({ isCommonRatingUpdated: false });
         }
 
-        this.setState({ error: "" });
+        if (this.props.editor === 'partner' && shortlist.partner === null) {
+          this.setState({ error: this.props.editor.name + "does not share this list with you anymore" });
+        } else {
+          this.setState({ error: "" });
+        }
+
       })
       .catch( error => {
         this.setState({ error: error });
@@ -210,14 +224,15 @@ class ModalList extends React.Component {
     const params = {
       id: this.props.shortlist._id
     };
-    axios.post('http://localhost:3003/api/unshare', params)
+    socket.emit("unshare", params);
+    /*axios.post('http://localhost:3003/api/unshare', params)
       .then( response => {
         this.handleUnshareClick();
         this.getData(this.props.shortlist._id);
       })
       .catch( error => {
         // TBD
-      });
+      });*/
   }
 
   rename(newname) {
@@ -326,18 +341,19 @@ class ModalList extends React.Component {
                 <MDBIcon icon="envelope-open-text" size="2x" />
               </MDBBadge>
               }
+
               <MDBBadge color="warning">
                 <MDBIcon icon="share-alt" size="2x" />
               </MDBBadge>
             </div> :
-            <div className="d-flex justify-content-end">
 
+            <div className="d-flex justify-content-end">
               <MDBBadge color="primary">
                 <MDBIcon icon="lock" size="2x"/>
               </MDBBadge>
+            </div>
 
-
-            </div>}
+            }
         </MDBCardHeader>
 
           <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"/>
