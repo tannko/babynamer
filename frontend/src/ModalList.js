@@ -115,7 +115,7 @@ class ModalList extends React.Component {
 
 
         if ((this.props.editor === 'partner' && shortlist.owner.isUpdated)
-              || (this.props.editor === 'owner' && shortlist.partner.isUpdated )){
+              || (this.props.editor === 'owner' && shortlist.partner && shortlist.partner.isUpdated )){
           this.setState({ isCommonRatingUpdated: true });
         } else {
           this.setState({ isCommonRatingUpdated: false });
@@ -331,9 +331,12 @@ class ModalList extends React.Component {
               </MDBBadge>
             </div> :
             <div className="d-flex justify-content-end">
+
               <MDBBadge color="primary">
                 <MDBIcon icon="lock" size="2x"/>
               </MDBBadge>
+
+
             </div>}
         </MDBCardHeader>
 
