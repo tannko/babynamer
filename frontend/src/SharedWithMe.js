@@ -33,6 +33,12 @@ class SharedWithMe extends React.Component {
         this.getData();
       }
     });
+
+    socket.on('listUnshared', params => {
+      if (params.userId === getUser()._id) {
+        this.getData();
+      }
+    })
   }
 
   componentWillUnmount() {

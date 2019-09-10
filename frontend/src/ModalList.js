@@ -72,8 +72,8 @@ class ModalList extends React.Component {
         this.getData();
       }
     });
-    socket.on('listUnshared', id => {
-      if (this.props.shortlist._id === id) {
+    socket.on('listUnshared', params => {
+      if (this.props.shortlist._id === params.listId) {
         this.handleUnshareClick();
         this.getData();
       }
@@ -100,6 +100,7 @@ class ModalList extends React.Component {
     socket.off('listRemoved');
     socket.off('listRenamed');
     socket.off('listShared');
+    socket.off('listUnshared');
     socket.off('ratingUpdated');
     socket.off('flagUpdated');
     socket.off('error');
@@ -222,7 +223,8 @@ class ModalList extends React.Component {
 
   unshare() {
     const params = {
-      id: this.props.shortlist._id
+      id: this.props.shortlist._id,
+      partnerId: this.state.shortlist.partner._id
     };
     socket.emit("unshare", params);
     /*axios.post('http://localhost:3003/api/unshare', params)

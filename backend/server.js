@@ -445,7 +445,7 @@ io.on('connection', socket => {
         io.sockets.emit('error', { id: id, error: err });
       } else {
         console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-        io.sockets.emit("listUnshared", id);
+        io.sockets.emit("listUnshared", { listId: id, userId: params.partnerId });
       }
     });
   })
