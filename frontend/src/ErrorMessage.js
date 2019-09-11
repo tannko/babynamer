@@ -5,8 +5,7 @@ class ErrorMessage extends React.Component {
   constructor(props) {
     super(props);
   }
-  // TO DO
-  // add link "more" for long error messages
+  
   render() {
     return(
       <MDBCard>

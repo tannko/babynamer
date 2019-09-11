@@ -16,6 +16,7 @@ import { socket } from './socket_api';
 import { objectToMap, areMapsEqual } from './utils';
 import CommonRating from './CommonRating';
 import ErrorMessage from './ErrorMessage';
+import ListCard from './components/ListCard';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -47,10 +48,6 @@ class ModalList extends React.Component {
   }
 
   componentDidMount() {
-    // as we get from props only id and name, get full shortlist from server by id
-    // and put it list to the state as an initial list
-
-    //const listId = this.props.shortlist._id;
     this.getData();
 
     socket.on('listRemoved', id => {
@@ -80,7 +77,6 @@ class ModalList extends React.Component {
     });
     socket.on('ratingUpdated', id => {
       if (this.props.shortlist._id === id) {
-        //this.setState({ isCommonRatingUpdated: true });
         this.getData();
       }
     });
@@ -227,14 +223,6 @@ class ModalList extends React.Component {
       partnerId: this.state.shortlist.partner._id
     };
     socket.emit("unshare", params);
-    /*axios.post('http://localhost:3003/api/unshare', params)
-      .then( response => {
-        this.handleUnshareClick();
-        this.getData(this.props.shortlist._id);
-      })
-      .catch( error => {
-        // TBD
-      });*/
   }
 
   rename(newname) {
@@ -267,7 +255,7 @@ class ModalList extends React.Component {
     const isError = this.state.error === "" ? false : true;
     const upperDiv =
             this.props.editor === 'owner' ?
-                                            <div>
+                                          <div>
                                             <div className="d-flex align-items-center">
                                               { sharedMessage }
                                               <div className="d-flex justify-content-right">
@@ -277,11 +265,10 @@ class ModalList extends React.Component {
                                                   remove={this.handleRemoveClick}
                                                   isShared={isShared} />
                                               </div>
-
                                             </div>
                                             { isError && <div className="d-flex"><ErrorMessage message={this.state.error}/></div>}
-                                            </div>
-                                          : <div></div>;
+                                          </div>
+                                        : <div></div>;
 
     return (
       <MDBContainer>
@@ -321,6 +308,7 @@ class ModalList extends React.Component {
             <MDBBtn color="primary" onClick={this.handleSaveClick}>Save</MDBBtn>
           </MDBModalFooter>
         </MDBModal>
+
         <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.share} />
         <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} rename={this.rename} />
         <RemoveModal toggle={this.handleRemoveClick}
@@ -332,39 +320,11 @@ class ModalList extends React.Component {
                       partner={partner}
                       unshare={this.unshare}/>
 
-        <a href="#" onClick={this.toggle}>
-        <MDBCard className="mt-3">
-
-          <MDBCardHeader>
-            { isShared ?
-            <div className="d-flex justify-content-end">
-              { isCommonRatingUpdated &&
-              <MDBBadge color="default">
-                <MDBIcon icon="envelope-open-text" size="2x" />
-              </MDBBadge>
-              }
-
-              <MDBBadge color="warning">
-                <MDBIcon icon="share-alt" size="2x" />
-              </MDBBadge>
-            </div> :
-
-            <div className="d-flex justify-content-end">
-              <MDBBadge color="primary">
-                <MDBIcon icon="lock" size="2x"/>
-              </MDBBadge>
-            </div>
-
-            }
-        </MDBCardHeader>
-
-          <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"/>
-            <MDBCardBody>
-              <MDBCardTitle>{shortlist.name}</MDBCardTitle>
-              <MDBCardText> has { this.state.updatedList.size } names </MDBCardText>
-            </MDBCardBody>
-        </MDBCard>
-        </a>
+        <ListCard toggle={this.toggle}
+                  isShared={isShared}
+                  isCommonRatingUpdated={isCommonRatingUpdated}
+                  name={shortlist.name}
+                  size={this.state.updatedList.size}/>
       </MDBContainer>
     );
   }

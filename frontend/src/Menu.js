@@ -78,9 +78,6 @@ class Menu extends React.Component {
                       </MDBCardBody>
                     </MDBCard>
                   </MDBCol>
-
-
-
                 </div>
             </MDBJumbotron>
           </MDBCol>

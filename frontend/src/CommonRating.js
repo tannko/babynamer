@@ -41,26 +41,4 @@ class CommonRating extends Component {
   }
 }
 
-class CommonRatingRow extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const name = this.props.name;
-    const rating = this.props.rating;
-    return(
-      <tr>
-        <td>{name}</td>
-        <td>
-          <ReactStarRatingComponent
-              name={name}
-              starCount={10}
-              value={rating} />
-        </td>
-      </tr>
-    );
-  }
-}
-
 export default CommonRating;
