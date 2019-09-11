@@ -17,6 +17,7 @@ import { objectToMap, areMapsEqual } from './utils';
 import CommonRating from './CommonRating';
 import ErrorMessage from './ErrorMessage';
 import ListCard from './components/ListCard';
+import SharedMessage from './components/SharedMessage';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -245,19 +246,12 @@ class ModalList extends React.Component {
     const isShared = shortlist.partner == null ? false : true;
     const isCommonRatingUpdated = this.state.isCommonRatingUpdated;
     const partner = shortlist.partner == null ? null : shortlist.partner.name;
-    const sharedMessage =
-                  isShared ?
-                  <div className="d-flex flex-grow-1 justify-content-center">
-                      { "You shared this list with " + partner }
-                  </div>
-                    :
-                  <div className="d-flex flex-grow-1"></div>;
     const isError = this.state.error === "" ? false : true;
     const upperDiv =
             this.props.editor === 'owner' ?
                                           <div>
                                             <div className="d-flex align-items-center">
-                                              { sharedMessage }
+                                              <SharedMessage isShared={isShared} partner={partner} />
                                               <div className="d-flex justify-content-right">
                                                 <DropdownMenu
                                                   share={ isShared ? this.handleUnshareClick : this.handleShareClick }
