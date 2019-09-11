@@ -67,9 +67,7 @@ class NameSorter extends React.Component {
     const countNames = "You have " + favourNames.size + nameForm + " in your shortlist";
     const btnClass = names.length == 0 ? "disabled" : "";
     return (
-      <MDBContainer className="w-50">
-        <MDBRow className="min-vh-100 align-items-center justify-content-center">
-          <MDBCol >
+
             <MDBCard>
               <MDBCardHeader className="d-flex align-items-center justify-content-end">
                 <div class="mr-auto">{this.state.errorMessage}</div>
@@ -86,12 +84,20 @@ class NameSorter extends React.Component {
                 {countNames}
               </MDBCardFooter>
             </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+
 
     );
   }
 }
 
 export default NameSorter;
+
+/*
+<MDBContainer className="w-50">
+  <MDBRow className="min-vh-100 align-items-center justify-content-center">
+    <MDBCol >
+  </MDBCol>
+</MDBRow>
+</MDBContainer>
+
+*/

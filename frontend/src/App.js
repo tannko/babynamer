@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import { MDBContainer } from 'mdbreact';
+import React, { Component } from 'react';
+import { MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol } from 'mdbreact';
 import NameSorter from './NameSorter';
 import GenderChooser from './GenderChooser';
 import ShortList from './ShortList';
@@ -66,14 +66,24 @@ class App extends Component {
     }
 
     return(
-      <MDBContainer className="min-vh-100 align-items-center justify-content-center">
+      <MDBContainer className="w-100 min-vh-100">
         <Navbar activeItem="newlist"/>
-          <div>
-            {currentView}
-          </div>
+         <MDBRow>
+           <MDBCol>
+             <MDBCard >
+               <MDBCardBody className="d-flex justify-content-center">
+                 <div className="w-50">
+                   {currentView}
+                 </div>
+               </MDBCardBody>
+             </MDBCard>
+           </MDBCol>
+         </MDBRow>
       </MDBContainer>
     );
   }
 }
 
 export default App;
+
+/*className="min-vh-100 align-items-center justify-content-center"*/

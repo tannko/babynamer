@@ -96,14 +96,13 @@ class ShortList extends React.Component {
 
     return (
 
-      <MDBContainer className="w-50">
+
         <form
           className="needs-validation"
           onSubmit={this.submitHandler}
           noValidate
           >
-        <MDBRow className="min-vh-100 align-items-center justify-content-center">
-          <MDBCol>
+
             <MDBCard>
               <MDBCardBody className="text-center">
                 <MDBCardTitle className="text-center">
@@ -121,13 +120,21 @@ class ShortList extends React.Component {
                 <div>{count}</div>
               </MDBCardBody>
             </MDBCard>
-          </MDBCol>
-        </MDBRow>
+
         </form>
-      </MDBContainer>
+
     );
   }
 }
+
+/*
+  <MDBContainer className="w-50">
+  <MDBRow className="min-vh-100 align-items-center justify-content-center">
+    <MDBCol>
+  </MDBCol>
+</MDBRow>
+    </MDBContainer>
+*/
 
 class ShortListRow extends React.Component {
   constructor(props) {

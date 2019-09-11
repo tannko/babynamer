@@ -18,9 +18,7 @@ class GenderChooser extends React.Component {
   render() {
     const welcomeText = 'I wanna find the best name for a';
     return (
-      <MDBContainer className="w-50">
-        <MDBRow className="min-vh-100 align-items-center">
-          <MDBCol>
+
             <MDBCard>
               <MDBCardBody className="text-center">
                 <MDBCardTitle>{welcomeText}</MDBCardTitle>
@@ -28,11 +26,19 @@ class GenderChooser extends React.Component {
                 <MDBBtn onClick={this.girlsHandleClick}>GIRL</MDBBtn>
               </MDBCardBody>
             </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+
     );
   }
 }
 
 export default GenderChooser;
+
+/*
+<MDBContainer className="w-50">
+  <MDBRow className="min-vh-100 align-items-center">
+    <MDBCol>
+  </MDBCol>
+</MDBRow>
+</MDBContainer>
+
+*/
