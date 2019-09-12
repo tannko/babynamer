@@ -356,14 +356,14 @@ const server = http.createServer(app);
 const io = socketIO(server);
 io.on('connection', socket => {
 
-  socket.on("remove", id => {
-    Shortlist.deleteOne({ _id: id }, (err, removeres) => {
+  socket.on("remove", params => {
+    Shortlist.deleteOne({ _id: params.id }, (err, removeres) => {
       if (err) {
         console.log('remove list error:' + err);
-        io.sockets.emit('error', { id: id, error: err, modal: 'removeModal' });
+        io.sockets.emit('error', { id: params.id, error: err, modal: 'removeModal' });
       } else {
         console.log('removed: ' + removeres.deletedCount);
-        io.sockets.emit("listRemoved", id);
+        io.sockets.emit('minorChange', { listId: params.id, userId: params.partnerId, modal: 'removeModal' });
       }
     });
   });

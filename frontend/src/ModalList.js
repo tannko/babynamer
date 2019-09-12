@@ -47,38 +47,18 @@ class ModalList extends React.Component {
   componentDidMount() {
     this.getData();
 
-    socket.on('listRemoved', id => {
-      if (this.props.shortlist._id === id) {
-        this.toggleMinor('removeModal');
-        this.toggleMain();
-        this.props.updateAll();
-      }
-    });
     socket.on('minorChange', params => {
       if (this.props.shortlist._id == params.listId) {
         this.toggleMinor(params.modal);
-        this.getData();
+        if (params.modal === 'removeModal') {
+          this.toggleMain();
+          this.props.updateAll();
+        } else {
+          this.getData();
+        }
       }
     });
 
-    /*socket.on('listRenamed', id => {
-      if (this.props.shortlist._id == id) {
-        this.toggleMinor('renameModal');
-        this.getData();
-      }
-    });
-    socket.on('listShared', params => {
-      if (this.props.shortlist._id == params.listId) {
-        this.toggleMinor('shareModal');
-        this.getData();
-      }
-    });
-    socket.on('listUnshared', params => {
-      if (this.props.shortlist._id === params.listId) {
-        this.toggleMinor('unshareModal');
-        this.getData();
-      }
-    });*/
     socket.on('ratingUpdated', id => {
       if (this.props.shortlist._id === id) {
         this.getData();
@@ -101,10 +81,6 @@ class ModalList extends React.Component {
   }
 
   componentWillUnmount() {
-    socket.off('listRemoved');
-    //socket.off('listRenamed');
-    //socket.off('listShared');
-    //socket.off('listUnshared');
     socket.off('minorChange');
     socket.off('ratingUpdated');
     socket.off('flagUpdated');
@@ -225,9 +201,10 @@ class ModalList extends React.Component {
 
   remove() {
     const params = {
-      id: this.props.shortlist._id
+      id: this.props.shortlist._id,
+      partnerId: this.state.shortlist.partner == null ? null : this.state.shortlist.partner._id
     };
-    socket.emit("remove", this.props.shortlist._id);
+    socket.emit("remove", params);
   }
 
   render() {
