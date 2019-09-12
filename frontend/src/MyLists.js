@@ -19,7 +19,6 @@ class MyLists extends React.Component {
 
   componentDidMount() {
     this.getData();
-
   }
 
   getData() {

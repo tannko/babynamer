@@ -30,7 +30,13 @@ class SharedWithMe extends React.Component {
   componentDidMount() {
     this.getData();
 
-    socket.on('listShared', params => {
+    socket.on('minorChange', params => {
+      if (getUser()._id == params.userId) {
+        this.getData();
+      }
+    });
+
+  /*  socket.on('listShared', params => {
       if (params.userId === getUser()._id) {
         this.getData();
       }
@@ -40,12 +46,13 @@ class SharedWithMe extends React.Component {
       if (params.userId === getUser()._id) {
         this.getData();
       }
-    })
+    }) */
   }
 
   componentWillUnmount() {
-    socket.off('listShared');
-    socket.off('listUnshared');
+    socket.off('minorChange');
+    //socket.off('listShared');
+    //socket.off('listUnshared');
   }
 
   getData() {

@@ -355,31 +355,15 @@ app.use('/api', router);
 const server = http.createServer(app);
 const io = socketIO(server);
 io.on('connection', socket => {
-  /*socket.on("saveDataFromShared", shortlist => {
-    Shortlist.updateOne({ _id: shortlist._id }, shortlist, (err, updres) => {
-      if (err) {
-        console.log('update list error: ' + err);
-        const params = {
-          id: shortlist._id,
-          error: err
-        };
-        io.sockets.emit('error', params);
-      } else {
-        console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-        io.sockets.emit("listIsUpdated", shortlist._id);
-      }
-    });
-  });*/
 
   socket.on("remove", id => {
     Shortlist.deleteOne({ _id: id }, (err, removeres) => {
       if (err) {
         console.log('remove list error:' + err);
-        io.sockets.emit('error', { id: id, error: err });
+        io.sockets.emit('error', { id: id, error: err, modal: 'removeModal' });
       } else {
         console.log('removed: ' + removeres.deletedCount);
         io.sockets.emit("listRemoved", id);
-        //io.sockets.emit("updateData");
       }
     });
   });
@@ -390,11 +374,10 @@ io.on('connection', socket => {
     Shortlist.updateOne({ _id: id }, { name: name }, (err, updres) => {
       if (err) {
         console.log('rename list error: ' + err);
-        io.sockets.emit('error', { id: id, error: err });
+        io.sockets.emit('error', { id: id, error: err, modal: 'renameModal' });
       } else {
         console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-        io.sockets.emit("listRenamed", id);
-        //res.status(200).send('updated');
+        io.sockets.emit('minorChange', { listId: id, userId: params.partnerId, modal: 'renameModal' });
       }
     });
   });
@@ -406,12 +389,14 @@ io.on('connection', socket => {
     User.findOne({ email: email }, ( err, user ) => {
       if (err) {
         console.log('error looking for user with email ' + email);
-        io.sockets.emit('error', { id: id, error: err });
+        io.sockets.emit('error', { id: id, error: err, modal: 'shareModal' });
       }
 
       if (!user) {
         console.log('user with email ' + email + ' is not found');
-        io.sockets.emit('error', { id: id, error: 'user with email ' + email + ' is not found' });
+        io.sockets.emit('error', { id: id,
+          error: 'user with email ' + email + ' is not found',
+          modal: 'shareModal' });
       }
 
       const partner = {
@@ -423,15 +408,16 @@ io.on('connection', socket => {
       Shortlist.updateOne({ _id: id }, { status: 1, partner: partner }, (err, updres) => {
         if (err) {
           console.log('share list error: ' + err);
-          io.sockets.emit('error', { id: id, error: err });
+          io.sockets.emit('error', { id: id, error: err, modal: 'shareModal' });
         } else {
           console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-          //res.status(200).send('shared');
           const resultParams = {
             listId: id,
-            userId: user._id
+            userId: user._id,
+            modal: 'shareModal'
           };
-          io.sockets.emit("listShared", resultParams);
+          //io.sockets.emit("listShared", resultParams);
+          io.sockets.emit('minorChange', resultParams);
         }
       });
     });
@@ -442,10 +428,10 @@ io.on('connection', socket => {
     Shortlist.updateOne({ _id: id }, { partner: null, status: 0 }, (err, updres) => {
       if (err) {
         console.log('unshare list error: ' + err);
-        io.sockets.emit('error', { id: id, error: err });
+        io.sockets.emit('error', { id: id, error: err, modal: 'unshareModal' });
       } else {
         console.log('matched: ' + updres.n + "; modified: " + updres.nModified);
-        io.sockets.emit("listUnshared", { listId: id, userId: params.partnerId });
+        io.sockets.emit('minorChange', { listId: id, userId: params.partnerId, modal: "unshareModal" });
       }
     });
   })

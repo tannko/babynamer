@@ -1,7 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 import { MDBContainer, MDBInput, MDBBtn } from 'mdbreact';
 import { MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } from 'mdbreact';
+import ErrorMessage from './components/ErrorMessage';
+import { socket } from './socket_api';
 
 class ShareModal extends React.Component {
   constructor(props) {
@@ -24,7 +25,6 @@ class ShareModal extends React.Component {
   }
 
   render() {
-
     return(
       <form
         className="needs-validation"
