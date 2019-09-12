@@ -7,7 +7,7 @@ import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from './components/ErrorMessage';
 import { socket } from './socket_api';
 
 

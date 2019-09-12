@@ -10,14 +10,12 @@ import ShortlistBody from './ShortlistBody';
 import ShareModal from './ShareModal';
 import RenameModal from './RenameModal';
 import RemoveModal from './RemoveModal';
-import DropdownMenu from './DropdownMenu';
 import UnshareModal from './UnshareModal';
 import { socket } from './socket_api';
 import { objectToMap, areMapsEqual } from './utils';
 import CommonRating from './CommonRating';
-import ErrorMessage from './ErrorMessage';
 import ListCard from './components/ListCard';
-import SharedMessage from './components/SharedMessage';
+import UpperPanel from './components/UpperPanel';
 
 class ModalList extends React.Component {
   constructor(props) {
@@ -25,6 +23,7 @@ class ModalList extends React.Component {
     this.state = {
       modal: false,
       shareModal: false,
+      unshareModal: false,
       renameModal: false,
       removeModal: false,
       initialList: new Map(),
@@ -36,11 +35,12 @@ class ModalList extends React.Component {
     }
     this.toggle = this.toggle.bind(this);
     this.updateRating = this.updateRating.bind(this);
-    this.handleShareClick = this.handleShareClick.bind(this);
-    this.handleRenameClick = this.handleRenameClick.bind(this);
-    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    //this.handleShareClick = this.handleShareClick.bind(this);
+    //this.handleRenameClick = this.handleRenameClick.bind(this);
+    //this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleUnshareClick = this.handleUnshareClick.bind(this);
+    //this.handleUnshareClick = this.handleUnshareClick.bind(this);
+    this.menuClick = this.menuClick.bind(this);
     this.share = this.share.bind(this);
     this.unshare = this.unshare.bind(this);
     this.rename = this.rename.bind(this);
@@ -66,7 +66,7 @@ class ModalList extends React.Component {
     });
     socket.on('listShared', params => {
       if (this.props.shortlist._id == params.listId) {
-        this.handleShareClick();
+        this.handleShareClick('shareModal');
         this.getData();
       }
     });
@@ -109,6 +109,7 @@ class ModalList extends React.Component {
       .then( response => {
         const shortlist = response.data;
         this.setState({ shortlist: shortlist });
+
         let nameslist = new Map();
         if (this.props.editor === 'partner' && shortlist.partner
               && !areMapsEqual(this.state.initialList, shortlist.partner.list)) {
@@ -143,8 +144,6 @@ class ModalList extends React.Component {
   toggle = () => {
     if (this.state.modal) {
       this.updateRating(this.state.initialList);
-    } else {
-      //this.setState({ isUpdated: false });
     }
 
     this.setState({
@@ -169,10 +168,17 @@ class ModalList extends React.Component {
     this.setState({ updatedList: list });
   }
 
-  handleShareClick() {
-    // show share modal
+  menuClick(modal) {
     this.setState({
-      shareModal: !this.state.shareModal
+      [modal]: !this.state[modal]
+    });
+  }
+
+/*
+  handleShareClick(modal) {
+    this.setState({
+      //shareModal: !this.state.shareModal
+      [modal]: !this.state[modal]
     });
   }
 
@@ -193,7 +199,7 @@ class ModalList extends React.Component {
       removeModal: !this.state.removeModal
     });
   }
-
+*/
   handleSaveClick() {
     const params = {
         id: this.state.shortlist._id,
@@ -243,34 +249,22 @@ class ModalList extends React.Component {
 
   render() {
     const shortlist = this.state.shortlist;
-    const isShared = shortlist.partner == null ? false : true;
+    const isShared = shortlist.partner === null ? false : true;
     const isCommonRatingUpdated = this.state.isCommonRatingUpdated;
-    const partner = shortlist.partner == null ? null : shortlist.partner.name;
-    const isError = this.state.error === "" ? false : true;
-    const upperDiv =
-            this.props.editor === 'owner' ?
-                                          <div>
-                                            <div className="d-flex align-items-center">
-                                              <SharedMessage isShared={isShared} partner={partner} />
-                                              <div className="d-flex justify-content-right">
-                                                <DropdownMenu
-                                                  share={ isShared ? this.handleUnshareClick : this.handleShareClick }
-                                                  rename={this.handleRenameClick}
-                                                  remove={this.handleRemoveClick}
-                                                  isShared={isShared} />
-                                              </div>
-                                            </div>
-                                            { isError && <div className="d-flex"><ErrorMessage message={this.state.error}/></div>}
-                                          </div>
-                                        : <div></div>;
+    const partner = shortlist.partner === null ? null : shortlist.partner.name;
 
     return (
       <MDBContainer>
-
         <MDBModal isOpen={this.state.modal} toggle={this.toggle} backdrop={false}>
           <MDBModalHeader toggle={this.toggle}>{shortlist.name}</MDBModalHeader>
           <MDBModalBody>
-            {upperDiv}
+            <UpperPanel editor={this.props.editor}
+                        partner={shortlist.partner}
+                        error={this.state.error}
+                        share={() => this.menuClick('shareModal')}
+                        unshare={() => this.menuClick('unshareModal')}
+                        rename={() => this.menuClick('renameModal')}
+                        remove={() => this.menuClick('removeModal')} />
             <MDBNav className="nav-tabs mt-5">
               <MDBNavItem>
                 <MDBNavLink to="#" active={this.state.activeItem === "1"} onClick={this.toggleRating("1")} role="tab">
@@ -303,13 +297,13 @@ class ModalList extends React.Component {
           </MDBModalFooter>
         </MDBModal>
 
-        <ShareModal toggle={this.handleShareClick} modal={this.state.shareModal} share={this.share} />
-        <RenameModal toggle={this.handleRenameClick} modal={this.state.renameModal} rename={this.rename} />
-        <RemoveModal toggle={this.handleRemoveClick}
+        <ShareModal toggle={() => this.menuClick('shareModal')} modal={this.state.shareModal} share={this.share} />
+        <RenameModal toggle={() => this.menuClick('renameModal')} modal={this.state.renameModal} rename={this.rename} />
+        <RemoveModal toggle={() => this.menuClick('removeModal')}
                      modal={this.state.removeModal}
                      listname={shortlist.name}
                      remove={this.remove}/>
-        <UnshareModal toggle={this.handleUnshareClick}
+        <UnshareModal toggle={() => this.menuClick('unshareModal')}
                       modal={this.state.unshareModal}
                       partner={partner}
                       unshare={this.unshare}/>
