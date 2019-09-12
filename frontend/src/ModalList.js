@@ -249,9 +249,9 @@ class ModalList extends React.Component {
 
   render() {
     const shortlist = this.state.shortlist;
-    const isShared = shortlist.partner === null ? false : true;
+    const isShared = shortlist.partner == null ? false : true;
     const isCommonRatingUpdated = this.state.isCommonRatingUpdated;
-    const partner = shortlist.partner === null ? null : shortlist.partner.name;
+    const partner = shortlist.partner == null ? null : shortlist.partner.name;
 
     return (
       <MDBContainer>
