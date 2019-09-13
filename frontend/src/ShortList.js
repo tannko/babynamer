@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactStarRatingComponent from 'react-star-rating-component';
+//import ReactStarRatingComponent from 'react-star-rating-component';
+import ShortlistRow from './components/ShortlistRow';
 import { withRouter } from 'react-router';
 import axios from 'axios';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
@@ -85,18 +86,15 @@ class ShortList extends React.Component {
   render() {
     const title = this.props.name;
     const rows = [];
-
-    // value, key
     this.props.list.forEach((rating, name) => {
-      rows.push(<ShortListRow name={name} rating={rating}
+      rows.push(<ShortlistRow name={name} rating={rating}
         starClick={this.starClick}/>);
     });
 
-    const count = this.props.list.size + " names";
+    const size = this.props.list.size;
+    const count = size > 1 ? size + " names" : size + " name";
 
     return (
-
-
         <form
           className="needs-validation"
           onSubmit={this.submitHandler}
@@ -123,46 +121,6 @@ class ShortList extends React.Component {
 
         </form>
 
-    );
-  }
-}
-
-/*
-  <MDBContainer className="w-50">
-  <MDBRow className="min-vh-100 align-items-center justify-content-center">
-    <MDBCol>
-  </MDBCol>
-</MDBRow>
-    </MDBContainer>
-*/
-
-class ShortListRow extends React.Component {
-  constructor(props) {
-    super(props);
-    //this.state = {rating: 0};
-    this.onStarClick = this.onStarClick.bind(this);
-  }
-
-  onStarClick(nextValue, prevValue, name) {
-    //this.setState({rating: nextValue});
-    this.props.starClick(nextValue, prevValue, name);
-  }
-
-  render() {
-    const name = this.props.name;
-    const rating = this.props.rating;
-
-    return(
-      <tr>
-        <td>{name}</td>
-        <td>
-          <ReactStarRatingComponent
-              name={name}
-              starCount={5}
-              value={rating}
-              onStarClick={this.onStarClick}/>
-        </td>
-      </tr>
     );
   }
 }
