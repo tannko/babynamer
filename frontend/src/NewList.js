@@ -1,6 +1,7 @@
 import React from 'react';
-//import ReactStarRatingComponent from 'react-star-rating-component';
 import ShortlistRow from './components/ShortlistRow';
+import ShortlistBody from './ShortlistBody';
+import ErrorMessage from './components/ErrorMessage';
 import { withRouter } from 'react-router';
 import axios from 'axios';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
@@ -9,13 +10,14 @@ import { MDBTable, MDBInput } from 'mdbreact';
 import { getUser } from './utils';
 import { socket } from './socket_api';
 
-class ShortList extends React.Component {
+class NewList extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { error: "" };
     this.nameInput = React.createRef();
     this.saveClick = this.saveClick.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
-    this.starClick = this.starClick.bind(this);
+    this.updateRating = this.updateRating.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
     this.focusNameInput = this.focusNameInput.bind(this);
@@ -30,31 +32,25 @@ class ShortList extends React.Component {
   }
 
   saveClick() {
-    // TO DO
-    // add form checker: name is not empty
     const shortlist = {
       name: this.props.name.trim(),
       status: 0,
       partner: null
     };
 
-    //const list = new Map();
-    //list.set('name', 0);
     const dataToSave = {
       user: getUser(), // TO DO change to owner
       shortlist: shortlist,
       list: [...this.props.list]
     };
-    //socket.emit("testSaveList", dataToSave);
 
     axios.post('http://localhost:3003/api/saveList', dataToSave)
       .then(res => {
-        // move to my lists page
+        this.setState({ error: "" });
         this.props.history.push('/lists');
       })
       .catch(err => {
-        // show modal about error with saving
-        //console.log(err);
+        this.setState({ error: err });
        });
 
   }
@@ -64,9 +60,7 @@ class ShortList extends React.Component {
     this.props.history.push('/menu');
   }
 
-  starClick(nextValue, prevValue, name) {
-    const list = new Map(this.props.list);
-    list.set(name, nextValue);
+  updateRating(list) {
     this.props.updateRating(list);
   }
 
@@ -85,15 +79,9 @@ class ShortList extends React.Component {
 
   render() {
     const title = this.props.name;
-    const rows = [];
-    this.props.list.forEach((rating, name) => {
-      rows.push(<ShortlistRow name={name} rating={rating}
-        starClick={this.starClick}/>);
-    });
-
     const size = this.props.list.size;
     const count = size > 1 ? size + " names" : size + " name";
-
+    const isError = this.state.error === "" ? false : true;
     return (
         <form
           className="needs-validation"
@@ -102,7 +90,8 @@ class ShortList extends React.Component {
           >
 
             <MDBCard>
-              <MDBCardBody className="text-center">
+              <MDBCardBody>
+                { isError && <ErrorMessage message={this.state.error} />}
                 <MDBCardTitle className="text-center">
                   <MDBInput inputRef={ref => this.nameInput = ref} label="Your list name" size="lg" name="title" onInput={this.handleInput} required pattern="\w+">
                     <div className="invalid-feedback">
@@ -110,13 +99,15 @@ class ShortList extends React.Component {
                     </div>
                   </MDBInput>
                 </MDBCardTitle>
-                <MDBTable scrollY maxHeight="60vh" className="text-left">
-                  {rows}
-                </MDBTable>
-                <MDBBtn color="secondary" onClick={this.cancelClick}>Cancel</MDBBtn>
-                <MDBBtn color="primary" type="submit">Save</MDBBtn>
-                <div>{count}</div>
+                <ShortlistBody list={this.props.list} updateRating={this.updateRating} />
+                <div className="d-flex justify-content-end">
+                  <MDBBtn color="secondary" onClick={this.cancelClick}>Cancel</MDBBtn>
+                  <MDBBtn color="primary" type="submit">Save</MDBBtn>
+                </div>
               </MDBCardBody>
+              <MDBCardFooter>
+                <div className="text-center">{count}</div>
+              </MDBCardFooter>
             </MDBCard>
 
         </form>
@@ -124,5 +115,4 @@ class ShortList extends React.Component {
     );
   }
 }
-
-export default withRouter(ShortList);
+export default withRouter(NewList);

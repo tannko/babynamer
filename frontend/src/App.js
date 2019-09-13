@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol } from 'mdbreact';
 import NameSorter from './NameSorter';
 import GenderChooser from './GenderChooser';
-import ShortList from './ShortList';
+import NewList from './NewList';
 import Navbar from './Navbar';
 
 
@@ -59,7 +59,7 @@ class App extends Component {
                       updateChosenNames={this.updateChosenNames}
                       />;
     } else if (isGenderSet && isNameListOver) {
-      currentView = <ShortList list={this.state.chosenNames}
+      currentView = <NewList list={this.state.chosenNames}
                                name={this.state.listname}
                                updateRating={this.updateRating}
                                updateListname={this.updateListname}/>;
@@ -85,5 +85,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*className="min-vh-100 align-items-center justify-content-center"*/

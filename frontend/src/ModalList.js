@@ -5,7 +5,6 @@ import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from 'm
 import { MDBBtn, MDBRow, MDBIcon, MDBCardHeader, MDBBadge } from 'mdbreact';
 import { MDBDropdown, MDBDropdownMenu, MDBDropdownItem, MDBDropdownToggle } from 'mdbreact';
 import { MDBTabContent, MDBTabPane, MDBNav, MDBNavItem, MDBNavLink, MDBTooltip } from 'mdbreact';
-import ShortList from './ShortList';
 import ShortlistBody from './ShortlistBody';
 import ShareModal from './ShareModal';
 import RenameModal from './RenameModal';

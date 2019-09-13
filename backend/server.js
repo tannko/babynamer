@@ -203,7 +203,7 @@ router.post('/updateList', (req, res) => {
     }
   });
 });
-
+/*
 router.post('/rename', (req, res) => {
   const id = req.body.id;
   const name = req.body.name;
@@ -232,7 +232,7 @@ router.post('/remove', (req, res) => {
     }
   });
 });
-
+*/
 /*router.post('/share', (req, res) => {
   const email = req.body.email;
   const id = req.body.id;

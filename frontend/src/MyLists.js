@@ -4,7 +4,6 @@ import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbrea
 import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBCardImage } from 'mdbreact';
 import { getUser } from './utils';
-import ShortList from './ShortList';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
 import ErrorMessage from './components/ErrorMessage';
