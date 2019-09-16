@@ -1,8 +1,8 @@
 import React from 'react';
 import { MDBContainer, MDBInput, MDBBtn } from 'mdbreact';
 import { MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } from 'mdbreact';
-import ErrorMessage from './components/ErrorMessage';
-import { socket } from './socket_api';
+import ErrorMessage from './ErrorMessage';
+import { socket } from '../utils/socket_api';
 
 class ShareModal extends React.Component {
   constructor(props) {

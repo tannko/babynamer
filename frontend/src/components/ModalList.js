@@ -10,11 +10,11 @@ import ShareModal from './ShareModal';
 import RenameModal from './RenameModal';
 import RemoveModal from './RemoveModal';
 import UnshareModal from './UnshareModal';
-import { socket } from './socket_api';
-import { objectToMap, areMapsEqual } from './utils';
+import { socket } from '../utils/socket_api';
+import { objectToMap, areMapsEqual } from '../utils/utils';
 import CommonRating from './CommonRating';
-import ListCard from './components/ListCard';
-import UpperPanel from './components/UpperPanel';
+import ListCard from './ListCard';
+import UpperPanel from './UpperPanel';
 
 class ModalList extends React.Component {
   constructor(props) {

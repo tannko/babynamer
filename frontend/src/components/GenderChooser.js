@@ -8,8 +8,8 @@ function GenderChooser(props) {
     <MDBCard>
       <MDBCardBody className="text-center">
         <MDBCardTitle>{welcomeText}</MDBCardTitle>
-        <MDBBtn onClick={() => props.onClick('m')}>BOY</MDBBtn>
-        <MDBBtn onClick={() => props.onClick('f')}>GIRL</MDBBtn>
+        <MDBBtn onClick={() => props.setGender('m')}>BOY</MDBBtn>
+        <MDBBtn onClick={() => props.setGender('f')}>GIRL</MDBBtn>
       </MDBCardBody>
     </MDBCard>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCard, MDBCardBody } from 'mdbreact';
 import axios from 'axios';
-import { login } from './utils';
+import { login } from '../utils/utils';
 
 class SignUp extends React.Component {
   constructor(props) {

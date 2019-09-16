@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol } from 'mdbreact';
 import NameSorter from './NameSorter';
 import GenderChooser from './GenderChooser';
-import NewList from './NewList';
+import NewListComponent from './NewListComponent';
 import Navbar from './Navbar';
-import EmptyList from './components/EmptyList';
+import EmptyList from './EmptyList';
 
 
-class App extends Component {
+class NewList extends Component {
   constructor(props) {
     super(props);
-    this.state = {gender: "", isNameListOver: false, chosenNames: new Map([]), listname: ""};
-    this.genderClick = this.genderClick.bind(this);
+    this.state = { gender: "", isNameListOver: false, chosenNames: new Map([]), listname: "" };
+    this.updateGender = this.updateGender.bind(this);
     this.startAgainClick = this.startAgainClick.bind(this);
     this.endNameSorted = this.endNameSorted.bind(this);
     this.updateChosenNames = this.updateChosenNames.bind(this);
@@ -28,7 +28,7 @@ class App extends Component {
     this.props.history.push('/menu');
   }
 
-  genderClick(gender) {
+  updateGender(gender) {
     this.setState({gender: gender});
   }
 
@@ -39,7 +39,6 @@ class App extends Component {
   updateChosenNames(chosenNames) {
     this.setState({ chosenNames: chosenNames });
   }
-
 
   updateRating(list) {
     this.setState({ chosenNames: list });
@@ -56,7 +55,7 @@ class App extends Component {
 
     let currentView;
     if (!isGenderSet) {
-      currentView = <GenderChooser onClick={this.genderClick}/>;
+      currentView = <GenderChooser setGender={this.updateGender}/>;
     } else if (isGenderSet && !isNameListOver) {
         currentView = <NameSorter gender={gender}
                       startAgain={this.startAgainClick}
@@ -65,10 +64,11 @@ class App extends Component {
                       updateChosenNames={this.updateChosenNames}
                       />;
     } else if (isGenderSet && isNameListOver && this.state.chosenNames.size > 0) {
-      currentView = <NewList list={this.state.chosenNames}
+      currentView = <NewListComponent list={this.state.chosenNames}
                                name={this.state.listname}
                                updateRating={this.updateRating}
-                               updateListname={this.updateListname}/>;
+                               updateListname={this.updateListname}
+                               backToMenu={this.backToMenu}/>;
     } else if (isGenderSet && isNameListOver && this.state.chosenNames.size == 0) {
       currentView = <EmptyList startAgain={this.startAgainClick}
                                backToMenu={this.backToMenu} />
@@ -93,4 +93,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default NewList;

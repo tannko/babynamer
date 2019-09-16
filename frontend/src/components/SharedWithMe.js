@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
-import { getUser } from './utils';
+import { getUser } from '../utils/utils';
 import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn } from 'mdbreact';
 import { MDBCardFooter, MDBCardHeader, MDBCardImage } from 'mdbreact';
 import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
 import ModalList from './ModalList';
 import Navbar from './Navbar';
-import ErrorMessage from './components/ErrorMessage';
-import { socket } from './socket_api';
+import ErrorMessage from './ErrorMessage';
+import { socket } from '../utils/socket_api';
 
 
 class SharedWithMe extends React.Component {

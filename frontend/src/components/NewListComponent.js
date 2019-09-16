@@ -1,22 +1,21 @@
 import React from 'react';
-import ShortlistRow from './components/ShortlistRow';
+import ShortlistRow from './ShortlistRow';
 import ShortlistBody from './ShortlistBody';
-import ErrorMessage from './components/ErrorMessage';
+import ErrorMessage from './ErrorMessage';
 import { withRouter } from 'react-router';
 import axios from 'axios';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
 import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBTable, MDBInput } from 'mdbreact';
-import { getUser } from './utils';
-import { socket } from './socket_api';
+import { getUser } from '../utils/utils';
+import { socket } from '../utils/socket_api';
 
-class NewList extends React.Component {
+class NewListComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = { error: "" };
     this.nameInput = React.createRef();
     this.saveClick = this.saveClick.bind(this);
-    this.cancelClick = this.cancelClick.bind(this);
     this.updateRating = this.updateRating.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
@@ -52,12 +51,6 @@ class NewList extends React.Component {
       .catch(err => {
         this.setState({ error: err });
        });
-
-  }
-
-  cancelClick() {
-    // return to the menu
-    this.props.history.push('/menu');
   }
 
   updateRating(list) {
@@ -88,7 +81,6 @@ class NewList extends React.Component {
           onSubmit={this.submitHandler}
           noValidate
           >
-
             <MDBCard>
               <MDBCardBody>
                 { isError && <ErrorMessage message={this.state.error} />}
@@ -101,7 +93,7 @@ class NewList extends React.Component {
                 </MDBCardTitle>
                 <ShortlistBody list={this.props.list} updateRating={this.updateRating} />
                 <div className="d-flex justify-content-end">
-                  <MDBBtn color="secondary" onClick={this.cancelClick}>Cancel</MDBBtn>
+                  <MDBBtn color="secondary" onClick={this.props.backToMenu}>Cancel</MDBBtn>
                   <MDBBtn color="primary" type="submit">Save</MDBBtn>
                 </div>
               </MDBCardBody>
@@ -115,4 +107,4 @@ class NewList extends React.Component {
     );
   }
 }
-export default withRouter(NewList);
+export default NewListComponent;

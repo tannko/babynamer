@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactStarRatingComponent from 'react-star-rating-component';
 import { MDBTable } from 'mdbreact';
-import { objectToMap } from './utils';
+import { objectToMap } from '../utils/utils';
 
 class CommonRating extends Component {
   constructor(props) {

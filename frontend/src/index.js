@@ -5,13 +5,13 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import 'bootstrap/dist/css/bootstrap.css';
-import App from './App';
-import AppLogin from './AppLogin';
-import Menu from './Menu';
-import PublicRoute from './PublicRoute';
-import PrivateRoute from './PrivateRoute';
-import MyLists from './MyLists';
-import SharedWithMe from './SharedWithMe';
+import NewList from './components/NewList';
+import AppLogin from './components/AppLogin';
+import Menu from './components/Menu';
+import PublicRoute from './components/PublicRoute';
+import PrivateRoute from './components/PrivateRoute';
+import MyLists from './components/MyLists';
+import SharedWithMe from './components/SharedWithMe';
 import * as serviceWorker from './serviceWorker';
 
 
@@ -20,7 +20,7 @@ const routing = (
     <div>
       <PublicRoute restricted={true} exact path="/" component={AppLogin} />
       <PrivateRoute path="/menu" component={Menu} />
-      <PrivateRoute path="/newlist" component={App} />
+      <PrivateRoute path="/newlist" component={NewList} />
       <PrivateRoute path="/lists" component={MyLists} />
       <PrivateRoute path="/shared" component={SharedWithMe} />
     </div>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { MDBNavbar, MDBNavbarBrand, MDBCollapse, MDBNavbarNav, MDBNavItem, MDBNavLink } from 'mdbreact';
 import { MDBDropdown, MDBDropdownToggle, MDBIcon, MDBDropdownMenu, MDBDropdownItem } from 'mdbreact';
 import { MDBNavbarToggler } from 'mdbreact';
-import { getUserName, logout } from './utils';
+import { getUserName, logout } from '../utils/utils';
 
 class Navbar extends Component {
   constructor(props) {

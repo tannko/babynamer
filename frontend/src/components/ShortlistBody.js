@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactStarRatingComponent from 'react-star-rating-component';
-import ShortlistRow from './components/ShortlistRow';
+import ShortlistRow from './ShortlistRow';
 import { MDBTable } from 'mdbreact';
 
 class ShortlistBody extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle } from 'mdbreact';
 import { MDBCardText, MDBCol, MDBRow, MDBContainer, MDBJumbotron } from 'mdbreact';
-import { getUserName, logout } from './utils';
+import { getUserName, logout } from '../utils/utils';
 import Navbar from './Navbar';
 
 class Menu extends React.Component {
