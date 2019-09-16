@@ -4,7 +4,7 @@ import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbrea
 import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBCardImage } from 'mdbreact';
 import { getUser } from '../utils/utils';
-import ModalList from './ModalList';
+import ShortlistEditor from './ShortlistEditor';
 import Navbar from './Navbar';
 import ErrorMessage from './ErrorMessage';
 import { socket } from '../utils/socket_api';
@@ -41,7 +41,7 @@ class MyLists extends React.Component {
     this.state.lists.forEach( list => {
       rows.push(
         <MDBCol md="4">
-          <ModalList shortlist={list} editor={'owner'} updateAll={this.getData}/>
+          <ShortlistEditor shortlist={list} editor={'owner'} updateAll={this.getData}/>
         </MDBCol>
       );
     });

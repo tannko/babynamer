@@ -5,7 +5,7 @@ import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCa
 import { MDBCardFooter, MDBCardHeader, MDBCardImage } from 'mdbreact';
 import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
-import ModalList from './ModalList';
+import ShortlistEditor from './ShortlistEditor';
 import Navbar from './Navbar';
 import ErrorMessage from './ErrorMessage';
 import { socket } from '../utils/socket_api';
@@ -99,7 +99,7 @@ class SharedWithMe extends React.Component {
       } else if (status === 2) {
         accepted.push(
           <MDBCol md="4">
-            <ModalList shortlist={list} editor={'partner'}/>
+            <ShortlistEditor shortlist={list} editor={'partner'}/>
           </MDBCol>
         );
       }

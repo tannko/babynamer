@@ -16,7 +16,7 @@ import CommonRating from './CommonRating';
 import ListCard from './ListCard';
 import UpperPanel from './UpperPanel';
 
-class ModalList extends React.Component {
+class ShortlistEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -267,7 +267,7 @@ class ModalList extends React.Component {
                       partner={partner}
                       unshare={this.unshare}/>
 
-                    <ListCard toggle={this.toggleMain}
+        <ListCard toggle={this.toggleMain}
                   isShared={isShared}
                   isCommonRatingUpdated={isCommonRatingUpdated}
                   name={shortlist.name}
@@ -277,4 +277,4 @@ class ModalList extends React.Component {
   }
 }
 
-export default ModalList;
+export default ShortlistEditor;
