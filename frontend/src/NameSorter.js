@@ -8,7 +8,7 @@ class NameSorter extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { nameToShowIndex: 0, names: [], progress: 0, errorMessage: "" };
+    this.state = { nameToShowIndex: 0, names: [], progress: 0, error: "" };
     this.yesHandleClick = this.yesHandleClick.bind(this);
     this.moveIndex = this.moveIndex.bind(this);
     this.backClick = this.backClick.bind(this);
@@ -22,7 +22,7 @@ class NameSorter extends React.Component {
       response => {
         this.setState({ names: response.data });
       }).catch(function(error) {
-        // show modal with error
+        this.setState({ error: error });
       })
   }
 
@@ -45,14 +45,14 @@ class NameSorter extends React.Component {
     if (nextIndex < this.state.names.length) {
       this.setState({ nameToShowIndex: nextIndex });
     } else {
-      this.props.endNameSorted();
+        this.props.endNameSorted();
     }
     this.setState({ progress: nextIndex * 100 / this.state.names.length, errorMessage: "" });
   }
 
   stopClick() {
     if (this.props.chosenNames.size == 0) {
-      this.setState({ errorMessage: "You should pick at least 1 name to save the shortlist" });
+      this.setState({ error: "You should pick at least 1 name to save the shortlist" });
     } else
       this.props.endNameSorted();
   }
@@ -70,7 +70,7 @@ class NameSorter extends React.Component {
 
             <MDBCard>
               <MDBCardHeader className="d-flex align-items-center justify-content-end">
-                <div class="mr-auto">{this.state.errorMessage}</div>
+                <div class="mr-auto">{this.state.error}</div>
                 <MDBBtn onClick={this.stopClick}>SAVE</MDBBtn>
               </MDBCardHeader>
               <MDBCardBody className="text-center">
@@ -91,13 +91,3 @@ class NameSorter extends React.Component {
 }
 
 export default NameSorter;
-
-/*
-<MDBContainer className="w-50">
-  <MDBRow className="min-vh-100 align-items-center justify-content-center">
-    <MDBCol >
-  </MDBCol>
-</MDBRow>
-</MDBContainer>
-
-*/

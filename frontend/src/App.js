@@ -4,6 +4,7 @@ import NameSorter from './NameSorter';
 import GenderChooser from './GenderChooser';
 import NewList from './NewList';
 import Navbar from './Navbar';
+import EmptyList from './components/EmptyList';
 
 
 class App extends Component {
@@ -20,6 +21,10 @@ class App extends Component {
 
   backClick() {
     this.setState({gender: ''});
+  }
+
+  backToMenu() {
+    this.props.history.push('/menu');
   }
 
   genderClick(gender) {
@@ -58,11 +63,14 @@ class App extends Component {
                       chosenNames={this.state.chosenNames}
                       updateChosenNames={this.updateChosenNames}
                       />;
-    } else if (isGenderSet && isNameListOver) {
+    } else if (isGenderSet && isNameListOver && this.state.chosenNames.size > 0) {
       currentView = <NewList list={this.state.chosenNames}
                                name={this.state.listname}
                                updateRating={this.updateRating}
                                updateListname={this.updateListname}/>;
+    } else if (isGenderSet && isNameListOver && this.state.chosenNames.size == 0) {
+      currentView = <EmptyList startAgain={this.backClick}
+                               backToMenu={this.backToMenu} />
     }
 
     return(
