@@ -8,19 +8,20 @@ import EmptyList from './components/EmptyList';
 
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {gender: '', isNameListOver: false, chosenNames: new Map([]), listname: ""};
+  constructor(props) {
+    super(props);
+    this.state = {gender: "", isNameListOver: false, chosenNames: new Map([]), listname: ""};
     this.genderClick = this.genderClick.bind(this);
-    this.backClick = this.backClick.bind(this);
+    this.startAgainClick = this.startAgainClick.bind(this);
     this.endNameSorted = this.endNameSorted.bind(this);
     this.updateChosenNames = this.updateChosenNames.bind(this);
     this.updateRating = this.updateRating.bind(this);
     this.updateListname = this.updateListname.bind(this);
+    this.backToMenu = this.backToMenu.bind(this);
   }
 
-  backClick() {
-    this.setState({gender: ''});
+  startAgainClick() {
+    this.setState({gender: "", chosenNames: new Map([]), isNameListOver: false });
   }
 
   backToMenu() {
@@ -58,7 +59,7 @@ class App extends Component {
       currentView = <GenderChooser onClick={this.genderClick}/>;
     } else if (isGenderSet && !isNameListOver) {
         currentView = <NameSorter gender={gender}
-                      backClick={this.backClick}
+                      startAgain={this.startAgainClick}
                       endNameSorted={this.endNameSorted}
                       chosenNames={this.state.chosenNames}
                       updateChosenNames={this.updateChosenNames}
@@ -69,7 +70,7 @@ class App extends Component {
                                updateRating={this.updateRating}
                                updateListname={this.updateListname}/>;
     } else if (isGenderSet && isNameListOver && this.state.chosenNames.size == 0) {
-      currentView = <EmptyList startAgain={this.backClick}
+      currentView = <EmptyList startAgain={this.startAgainClick}
                                backToMenu={this.backToMenu} />
     }
 
