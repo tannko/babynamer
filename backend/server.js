@@ -3,21 +3,25 @@ const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const Babyname = require('./babyname');
-const Shortlist = require('./ShortlistSchema');
+//const Babyname = require('./babyname');
+const Shortlist = require('./models/ShortlistSchema');
 const bcrypt = require('bcrypt');
-const { User, validate } = require('./UserSchema');
+const { User, validate } = require('./models/UserSchema');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const socketIO = require('socket.io');
 const http = require('http');
+const babynameController = require('./controllers/babynameController');
+const authController = require('./controllers/authController');
+const shortlistController = require('./controllers/shortlistController');
 
 const API_PORT = 3003;
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
 const router = express.Router();
 
 // this is our MongoDB database
@@ -90,7 +94,9 @@ passport.use(new LocalStrategy(
   }
 ));
 
-router.get('/test/gender/:gender', (req, res) => {
+router.get('/gender/:gender', babynameController.babyname_list_get);
+
+/*(req, res) => {
   Babyname.find({ gender : req.params.gender },(err, data) => {
     if (err) {
       console.log(err);
@@ -98,11 +104,17 @@ router.get('/test/gender/:gender', (req, res) => {
       console.log("received data: " + data.length);
       res.json(data);
     }
-  })
-});
+  });
+});*/
 
 // create new user and login
-router.post('/signup', async (req, res, next) => {
+router.post('/signup', authController.auth_signup_post,
+  passport.authenticate('local'), (req, res) => {
+    console.log("authentication successful, user: " + req.user);
+    res.json(req.user);
+  });
+
+/*async (req, res, next) => {
   console.log('server signup');
   const {error} = validate(req.body);
   if (error) {
@@ -131,19 +143,22 @@ router.post('/signup', async (req, res, next) => {
   console.log("authentication successful, user: " + req.user);
   res.json(req.user);
   }
-);
+);*/
 
 // login existed user
 router.post('/signin',
             passport.authenticate('local'),
-            (req, res) => {
+            authController.auth_signin_post
+          /*  (req, res) => {
               console.log("authentication successful, user: " + req.user);
               res.send(req.user);
-            }
+            }*/
 );
 
 // save new shortlist
-router.post('/saveList', (req, res) => {
+router.post('/saveList', shortlistController.shortlist_create_post);
+
+/*(req, res) => {
   const user = req.body.user;
   const shortlist = req.body.shortlist;
   const list = new Map([...req.body.list]);
@@ -186,8 +201,9 @@ router.post('/saveList', (req, res) => {
     });
 
   });
-});
+});*/
 
+/*
 router.post('/updateList', (req, res) => {
   //const shortlist = req.body.shortlist;
   const id = req.body.id;
@@ -203,7 +219,7 @@ router.post('/updateList', (req, res) => {
     }
   });
 });
-/*
+
 router.post('/rename', (req, res) => {
   const id = req.body.id;
   const name = req.body.name;
@@ -266,7 +282,7 @@ router.post('/remove', (req, res) => {
     });
   });
 });
-*/
+
 router.post('/unshare', (req, res) => {
   const id = req.body.id;
   Shortlist.updateOne({ _id: id }, { partner: null, status: 0 }, (err, updres) => {
@@ -278,9 +294,10 @@ router.post('/unshare', (req, res) => {
       res.status(200).send('unshared');
     }
   });
-});
+});*/
 
-router.post('/accept', (req, res) => {
+router.post('/accept', shortlistController.shortlist_accept_post);
+/*(req, res) => {
   const listId = req.body.id;
   console.log('user' + req.body.user + ' accepts list ' + listId);
   Shortlist.updateOne({ _id: listId }, { status : 2 }, (err, updres) => {
@@ -292,9 +309,10 @@ router.post('/accept', (req, res) => {
       res.status(200).send('accepted');
     }
   })
-});
+});*/
 
-router.get('/lists/:userId', (req, res) => {
+router.get('/lists/:userId', shortlistController.shortlist_lists_get);
+/*(req, res) => {
   const userId = req.params.userId;
   console.log('userId: ' + userId);
   Shortlist.find({ 'owner.id': userId }, '_id name', (err, data) => {
@@ -305,9 +323,10 @@ router.get('/lists/:userId', (req, res) => {
     console.log('some lists found: ' + data.length);
     res.send(data);
   });
-});
+});*/
 
-router.get('/list/:listId', (req, res) => {
+router.get('/list/:listId', shortlistController.shortlist_get);
+/*(req, res) => {
   //console.log("list id: " + req.params.listId);
   Shortlist.findById(req.params.listId, (err, shortlist) => {
     if (err) {
@@ -318,9 +337,10 @@ router.get('/list/:listId', (req, res) => {
       res.send(shortlist);
     }
   });
-});
+});*/
 
-router.get('/shared/:id', (req, res) => {
+router.get('/shared/:id', shortlistController.shortlist_shared_get);
+/*(req, res) => {
   const userId = req.params.id;
   console.log('shared with ' + userId);
   Shortlist.find({ 'partner.id': userId }, '_id name status owner.name', (err, data) => {
@@ -332,8 +352,8 @@ router.get('/shared/:id', (req, res) => {
       res.send(data);
     }
   });
-});
-
+});*/
+/*
 router.get('/user/:id', (req, res) => {
   const id = req.params.id;
   User.findOne({ _id: id }, (err, user) => {
@@ -344,7 +364,7 @@ router.get('/user/:id', (req, res) => {
     console.log('user found');
     res.send(user);
   });
-});
+});*/
 
 // append /api for our http requests
 app.use('/api', router);

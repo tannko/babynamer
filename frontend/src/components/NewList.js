@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { MDBContainer, MDBCard, MDBCardBody, MDBRow, MDBCol } from 'mdbreact';
 import NameSorter from './NameSorter';
 import GenderChooser from './GenderChooser';
 import NewListComponent from './NewListComponent';
 import Navbar from './Navbar';
 import EmptyList from './EmptyList';
+import { getUser } from '../utils/utils';
 
 
 class NewList extends Component {
@@ -18,6 +20,7 @@ class NewList extends Component {
     this.updateRating = this.updateRating.bind(this);
     this.updateListname = this.updateListname.bind(this);
     this.backToMenu = this.backToMenu.bind(this);
+    this.saveNewList = this.saveNewList.bind(this);
   }
 
   startAgainClick() {
@@ -48,6 +51,29 @@ class NewList extends Component {
     this.setState({ listname: name });
   }
 
+  saveNewList() {
+    const shortlist = {
+      name: this.state.listname.trim(),
+      status: 0,
+      partner: null
+    };
+
+    const dataToSave = {
+      user: getUser(), // TO DO change to owner
+      shortlist: shortlist,
+      list: [...this.state.chosenNames]
+    };
+
+    axios.post('http://localhost:3003/api/saveList', dataToSave)
+      .then(res => {
+        this.setState({ error: "" });
+        this.props.history.push('/lists');
+      })
+      .catch(err => {
+        this.setState({ error: err.message });
+       });
+  }
+
   render() {
     const gender = this.state.gender;
     const isGenderSet = this.state.gender == '' ? false : true;
@@ -68,7 +94,8 @@ class NewList extends Component {
                                name={this.state.listname}
                                updateRating={this.updateRating}
                                updateListname={this.updateListname}
-                               backToMenu={this.backToMenu}/>;
+                               backToMenu={this.backToMenu}
+                               saveNewList={this.saveNewList}/>;
     } else if (isGenderSet && isNameListOver && this.state.chosenNames.size == 0) {
       currentView = <EmptyList startAgain={this.startAgainClick}
                                backToMenu={this.backToMenu} />

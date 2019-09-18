@@ -16,10 +16,11 @@ class NameSorter extends React.Component {
 
   componentDidMount() {
     const gender = this.props.gender;
-    axios.get('http://localhost:3003/api/test/gender/' + this.props.gender).then(
-      response => {
+    axios.get('http://localhost:3003/api/gender/' + this.props.gender).
+      then( response => {
         this.setState({ names: response.data });
-      }).catch(function(error) {
+      }).
+      catch( error => {
         this.setState({ error: error });
       })
   }

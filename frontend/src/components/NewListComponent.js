@@ -2,12 +2,9 @@ import React from 'react';
 import ShortlistRow from './ShortlistRow';
 import ShortlistBody from './ShortlistBody';
 import ErrorMessage from './ErrorMessage';
-import { withRouter } from 'react-router';
-import axios from 'axios';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
 import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBTable, MDBInput } from 'mdbreact';
-import { getUser } from '../utils/utils';
 import { socket } from '../utils/socket_api';
 
 class NewListComponent extends React.Component {
@@ -15,7 +12,6 @@ class NewListComponent extends React.Component {
     super(props);
     this.state = { error: "" };
     this.nameInput = React.createRef();
-    this.saveClick = this.saveClick.bind(this);
     this.updateRating = this.updateRating.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
@@ -30,29 +26,6 @@ class NewListComponent extends React.Component {
     this.props.updateListname(e.target.value);
   }
 
-  saveClick() {
-    const shortlist = {
-      name: this.props.name.trim(),
-      status: 0,
-      partner: null
-    };
-
-    const dataToSave = {
-      user: getUser(), // TO DO change to owner
-      shortlist: shortlist,
-      list: [...this.props.list]
-    };
-
-    axios.post('http://localhost:3003/api/saveList', dataToSave)
-      .then(res => {
-        this.setState({ error: "" });
-        this.props.history.push('/lists');
-      })
-      .catch(err => {
-        this.setState({ error: err });
-       });
-  }
-
   updateRating(list) {
     this.props.updateRating(list);
   }
@@ -62,7 +35,7 @@ class NewListComponent extends React.Component {
     event.target.className += " was-validated";
     const regex = /\w+/;
     if (this.props.name.trim() !== "" && regex.test(this.props.name.trim())) {
-      this.saveClick();
+      this.props.saveNewList();
     }
   }
 
