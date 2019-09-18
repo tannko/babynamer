@@ -47,7 +47,7 @@ class SharedWithMe extends React.Component {
         this.setState({ sharedLists: response.data, error: "" });
       })
       .catch( error => {
-        this.setState({ error: error });
+        this.setState({ error: error.message });
       });
   }
 
@@ -69,7 +69,7 @@ class SharedWithMe extends React.Component {
         this.getData();
       })
       .catch( error => {
-        this.setState({ error: error });
+        this.setState({ error: error.message });
       });
   }
 
@@ -79,7 +79,7 @@ class SharedWithMe extends React.Component {
         this.getData();
       })
       .catch( error => {
-        this.setState({ error: error });
+        this.setState({ error: error.message });
       });
   }
 

@@ -2,13 +2,15 @@ import React from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import axios from 'axios';
 import { login } from '../utils/utils';
+import ErrorMessage from './ErrorMessage';
 
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password:""
+      password:"",
+      error: ""
     };
     this.loginHandleClick = this.loginHandleClick.bind(this);
     this.signupHandleClick = this.signupHandleClick.bind(this);
@@ -37,10 +39,11 @@ class SignIn extends React.Component {
           //console.log("response: " + response);
           login(response.data);
           this.props.userLoggedIn();
+          this.setState({ error: "" });
         }
       ).catch(
         error => {
-          console.log("error: " + error);
+          this.setState({ error: error.message });
         }
       );
   }
@@ -56,6 +59,7 @@ class SignIn extends React.Component {
   }
 
   render() {
+    const isError = this.state.error === "" ? false : true;
     return (
     <MDBContainer className="min-vh-100">
       <form
@@ -73,6 +77,7 @@ class SignIn extends React.Component {
               </MDBRow>
             </div>
             <MDBCardBody className="mx-4 mt-4">
+              { isError && <ErrorMessage message={this.state.error} />}
               <MDBInput
                 label="Your email"
                 name="email"

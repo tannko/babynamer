@@ -27,7 +27,7 @@ class MyLists extends React.Component {
         this.setState({ lists: response.data, error: "" });
       })
       .catch( error => {
-        this.setState({ error: error });
+        this.setState({ error: error.message });
       });
   }
 
