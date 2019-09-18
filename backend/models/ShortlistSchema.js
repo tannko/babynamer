@@ -22,4 +22,4 @@ const ShortlistSchema = new Schema (
   }
 );
 
-module.exports = mongoose.model("Shortlist", ShortlistSchema,'shortlists');
+module.exports = mongoose.model("Shortlist", ShortlistSchema, 'shortlists');

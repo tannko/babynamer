@@ -26,14 +26,14 @@ exports.auth_signup_post = function(req, res, next) {
     }).
     then( hashedPassword => {
       newUser.password = hashedPassword;
-      user.save();
+      return newUser.save();
     }).
-    then( () => {
+    then( user => {
       next();
     }).
-    catch(error => {
+    catch( error => {
       console.log("signup error: " + error);
-      res.status(200).send(error);
+      next(error);
     });
 /*  let user = await User.findOne({ email: req.body.email });
   if (user) {
