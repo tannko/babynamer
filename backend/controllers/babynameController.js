@@ -10,13 +10,4 @@ exports.babyname_list_get = function(req, res) {
       console.log(error);
       res.status(400).send(error);
     });
-
-  /*Babyname.find({ gender : req.params.gender },(err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("received data: " + data.length);
-      res.json(data);
-    }
-  })*/
 };

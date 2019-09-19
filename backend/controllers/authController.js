@@ -35,27 +35,6 @@ exports.auth_signup_post = function(req, res, next) {
       console.log("signup error: " + error);
       next(error);
     });
-/*  let user = await User.findOne({ email: req.body.email });
-  if (user) {
-    console.log("user already exists");
-    return res.status(400).send("User already exists");
-  }
-
-  user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
-  });
-  user.password = await bcrypt.hash(user.password, 10);
-  console.log("lets save user");
-  await user.save();
-  console.log("user saved");
-  next();
-}, passport.authenticate('local'),
-  (req, res) => {
-  console.log("authentication successful, user: " + req.user);
-  res.json(req.user);
-}*/
 };
 
 exports.auth_signin_post = function(req, res) {
