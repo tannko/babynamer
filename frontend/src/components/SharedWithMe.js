@@ -92,14 +92,14 @@ class SharedWithMe extends React.Component {
       // sharing is pending
       if (status === 1) {
         invitations.push(
-          <MDBCol md="4">
-            <Invitation list={list} accept={() => this.accept(list._id)} decline={() => this.decline(list._id)} />
+          <MDBCol md="4" key={list.name}>
+            <Invitation list={list} accept={() => this.accept(list._id)} decline={() => this.decline(list._id)} key={list.name}/>
           </MDBCol>
         );
       } else if (status === 2) {
         accepted.push(
-          <MDBCol md="4">
-            <ShortlistEditor shortlist={list} editor={'partner'}/>
+          <MDBCol md="4" key={list.name}>
+            <ShortlistEditor shortlist={list} editor={'partner'} key={list.name}/>
           </MDBCol>
         );
       }
