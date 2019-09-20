@@ -28,5 +28,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "homepage": ".",
+  "engines": {
+        "node": "10.15.0",
+        "npm": "6.4.1"
+    }
 }
