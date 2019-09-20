@@ -10,7 +10,7 @@ module.exports = function (app) {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(logger('dev'));
-  app.use(session({ secret: "mysecret" }));
+  app.use(session({ secret: process.env.SECRET || "mysecret" }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/api', routes());
