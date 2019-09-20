@@ -40,8 +40,8 @@ class MyLists extends React.Component {
     const isError = this.state.error === "" ? false : true;
     this.state.lists.forEach( list => {
       rows.push(
-        <MDBCol md="4">
-          <ShortlistEditor shortlist={list} editor={'owner'} updateAll={this.getData}/>
+        <MDBCol md="4" key={list.name}>
+          <ShortlistEditor shortlist={list} editor={'owner'} updateAll={this.getData} key={list.name}/>
         </MDBCol>
       );
     });

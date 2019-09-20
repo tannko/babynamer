@@ -24,7 +24,7 @@ module.exports = function () {
 
   router.get('/gender/:gender', babynameController.babyname_list_get);
 
-  router.post('/saveList', shortlistController.shortlist_create_post);
+  router.post('/create', shortlistController.shortlist_create_post);
   router.post('/accept', shortlistController.shortlist_accept_post);
   router.get('/lists/:userId', shortlistController.shortlist_lists_get);
   router.get('/list/:listId', shortlistController.shortlist_get);

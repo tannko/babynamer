@@ -64,7 +64,7 @@ class NewList extends Component {
       list: [...this.state.chosenNames]
     };
 
-    axios.post('http://localhost:3003/api/saveList', dataToSave)
+    axios.post('http://localhost:3003/api/create', dataToSave)
       .then(res => {
         this.setState({ error: "" });
         this.props.history.push('/lists');

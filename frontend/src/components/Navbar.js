@@ -29,7 +29,7 @@ class Navbar extends Component {
         <MDBNavbarToggler onClick={this.toggleCollapse} />
         <MDBCollapse navbar>
           <MDBNavbarNav left>
-            <MDBNavItem name="home" className={homeClass} onCLick={this.handleHomeClick}>
+            <MDBNavItem name="home" className={homeClass} onClick={this.handleHomeClick}>
               <MDBNavLink to="/">Home</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem name="newlist" className={newlistClass} onClick={this.handleNewClick}>
