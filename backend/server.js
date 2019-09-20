@@ -1,4 +1,5 @@
 require('dotenv').config();
+process.env.PWD = process.cwd()
 const express = require('express');
 const config = require('./config');
 const http = require('http');
@@ -11,9 +12,9 @@ function startServer() {
   loaders(app);
 
 
-  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.use(express.static(path.join(process.env.PWD, "../client/build")));
   app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"));
+    res.sendFile(path.join(process.env.PWD, "../client/build/index.html"));
   });
 
   const server = http.createServer(app);
