@@ -21,7 +21,7 @@ class NameSorter extends React.Component {
         this.setState({ names: response.data });
       }).
       catch( error => {
-        this.setState({ error: error });
+        this.setState({ error: error.message });
       })
   }
 

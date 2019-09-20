@@ -1,6 +1,6 @@
 const socketIO = require('socket.io');
-const Shortlist = require('./models/ShortlistSchema');
-const { User } = require('./models/UserSchema');
+const Shortlist = require('../models/ShortlistSchema');
+const { User } = require('../models/UserSchema');
 
 module.exports = function (server) {
   const io = socketIO(server);

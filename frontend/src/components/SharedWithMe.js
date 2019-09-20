@@ -146,7 +146,3 @@ class SharedWithMe extends React.Component {
 }
 
 export default SharedWithMe;
-
-/*
-
-*/

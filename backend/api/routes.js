@@ -1,11 +1,15 @@
 const express = require('express');
 
-const babynameController = require('./controllers/babynameController');
-const authController = require('./controllers/authController');
-const shortlistController = require('./controllers/shortlistController');
+const babynameController = require('../controllers/babynameController');
+const authController = require('../controllers/authController');
+const shortlistController = require('../controllers/shortlistController');
 
-module.exports = function (passport) {
+const passportInit = require('./passport_init');
+
+module.exports = function () {
   const router = express.Router();
+  const passport = passportInit();
+
   // create new user and login
   router.post('/signup', authController.auth_signup_post,
     passport.authenticate('local'), (req, res) => {
