@@ -106,7 +106,6 @@ class SignIn extends React.Component {
               <div className="text-center mb-4 mt-5">
                 <MDBBtn
                   color="danger"
-                  type="button"
                   className="btn-block z-depth-2"
                   type="submit"
                 >
