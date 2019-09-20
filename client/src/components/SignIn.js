@@ -43,7 +43,7 @@ class SignIn extends React.Component {
         }
       ).catch(
         error => {
-          this.setState({ error: error.message });
+          this.setState({ error: error.stack });
         }
       );
   }
