@@ -2,7 +2,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const session = require('express-session');
-const passport = require('passport');
+const passport = require('../api/passport_init')();
 const routes = require('../api/routes');
 
 module.exports = function (app) {
@@ -11,7 +11,8 @@ module.exports = function (app) {
   app.use(bodyParser.json());
   app.use(logger('dev'));
   app.use(session({ secret: process.env.SECRET || "mysecret" }));
+
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use('/api', routes());
+  app.use('/api', routes(passport));
 };
