@@ -33,7 +33,7 @@ class SignIn extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
-    axios.post('https://babynam.herokuapp.com//api/signin', params)
+    axios.post('https://babynam.herokuapp.com/api/signin', params)
       .then(
         response => {
           //console.log("response: " + response);
