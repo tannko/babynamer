@@ -13,7 +13,7 @@ function startServer() {
 
 
   app.use(express.static(path.join(process.env.PWD, "../client/build")));
-  app.get("/", (req, res) => {
+  app.get("*", (req, res) => {
     res.sendFile(path.join(process.env.PWD, "../client/build/index.html"));
   });
 
