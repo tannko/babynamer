@@ -12,9 +12,10 @@ function startServer() {
   loaders(app);
 
 
-  app.use(express.static(path.join(process.env.PWD + "../client/build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(process.env.PWD + "../client/build/index.html"));
+  app.use(express.static(path.join(process.env.PWD , "../client/build")));
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    //res.sendFile(path.join(process.env.PWD , "../client/build/index.html"));
   });
 
   const server = http.createServer(app);
