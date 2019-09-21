@@ -75,13 +75,11 @@ class SharedWithMe extends React.Component {
   }
 
   decline(listId) {
-    unshare() {
-      const params = {
-        id: listId,
-        partnerId: this.state.user._id
-      };
-      socket.emit("unshare", params);
-    }
+    const params = {
+      id: listId,
+      partnerId: this.state.user._id
+    };
+    socket.emit("unshare", params);
     /*
     axios.post('http://localhost:3003/api/unshare', { id: listId })
       .then( response => {
