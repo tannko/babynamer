@@ -9,6 +9,7 @@ import ShortlistEditor from './ShortlistEditor';
 import Navbar from './Navbar';
 import ErrorMessage from './ErrorMessage';
 import { socket } from '../utils/socket_api';
+import { baseUrl } from '../utils/config';
 
 
 class SharedWithMe extends React.Component {
@@ -42,7 +43,7 @@ class SharedWithMe extends React.Component {
   }
 
   getData() {
-    axios.get('http://localhost:3003/api/shared/' + this.state.user._id)
+    axios.get(baseUrl + '/api/shared/' + this.state.user._id)//('http://localhost:3003/api/shared/' + this.state.user._id)
       .then( response => {
         this.setState({ sharedLists: response.data, error: "" });
       })
@@ -64,7 +65,7 @@ class SharedWithMe extends React.Component {
       id: listId,
       user: this.state.user._id
     };
-    axios.post('http://localhost:3003/api/accept', params)
+    axios.post(baseUrl + '/api/accept', params)//('http://localhost:3003/api/accept', params)
       .then( response => {
         this.getData();
       })
@@ -74,13 +75,21 @@ class SharedWithMe extends React.Component {
   }
 
   decline(listId) {
+    unshare() {
+      const params = {
+        id: listId,
+        partnerId: this.state.user._id
+      };
+      socket.emit("unshare", params);
+    }
+    /*
     axios.post('http://localhost:3003/api/unshare', { id: listId })
       .then( response => {
         this.getData();
       })
       .catch( error => {
         this.setState({ error: error.message });
-      });
+      });*/
   }
 
   render() {

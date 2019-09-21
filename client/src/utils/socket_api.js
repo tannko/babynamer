@@ -1,3 +1,4 @@
 import socketIOClient from 'socket.io-client';
-const socket = socketIOClient('http://localhost:3003/');
+import { baseUrl } from './config';
+const socket = socketIOClient(baseUrl);
 export { socket };

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
 import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBProgress, MDBIcon } from 'mdbreact';
+import { baseUrl } from '../utils/config';
 
 class NameSorter extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class NameSorter extends React.Component {
 
   componentDidMount() {
     const gender = this.props.gender;
-    axios.get('http://localhost:3003/api/gender/' + this.props.gender).
+    axios.get(baseUrl + '/api/gender/' + this.props.gender).//('http://localhost:3003/api/gender/' + this.props.gender).
       then( response => {
         this.setState({ names: response.data });
       }).

@@ -3,6 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBCard, MDBCardBody } 
 import axios from 'axios';
 import { login } from '../utils/utils';
 import ErrorMessage from './ErrorMessage';
+import { baseUrl } from '../utils/config';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class SignUp extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
-    axios.post('http://localhost:3003/api/signup', params)
+    axios.post(baseUrl + '/api/signup', params)//('http://localhost:3003/api/signup', params)
       .then(
         response => {
           //console.log('response: ' + response);

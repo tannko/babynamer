@@ -15,6 +15,7 @@ import { objectToMap, areMapsEqual } from '../utils/utils';
 import CommonRating from './CommonRating';
 import ListCard from './ListCard';
 import UpperPanel from './UpperPanel';
+import { baseUrl } from '../utils/config';
 
 class ShortlistEditor extends React.Component {
   constructor(props) {
@@ -88,7 +89,7 @@ class ShortlistEditor extends React.Component {
 
   getData() {
     const listId = this.props.shortlist._id;
-    axios.get('http://localhost:3003/api/list/' + listId)
+    axios.get(baseUrl + '/api/list/' + listId)//('http://localhost:3003/api/list/' + listId)
       .then( response => {
         const shortlist = response.data;
         this.setState({ shortlist: shortlist });

@@ -8,6 +8,7 @@ import ShortlistEditor from './ShortlistEditor';
 import Navbar from './Navbar';
 import ErrorMessage from './ErrorMessage';
 import { socket } from '../utils/socket_api';
+import { baseUrl } from '../utils/config';
 
 class MyLists extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class MyLists extends React.Component {
 
   getData() {
     const user = getUser();
-    axios.get('http://localhost:3003/api/lists/' + user._id)
+    axios.get(baseUrl + '/api/lists/' + user._id)//('http://localhost:3003/api/lists/' + user._id)
       .then( response => {
         this.setState({ lists: response.data, error: "" });
       })

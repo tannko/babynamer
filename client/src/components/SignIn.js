@@ -3,6 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } 
 import axios from 'axios';
 import { login } from '../utils/utils';
 import ErrorMessage from './ErrorMessage';
+import { baseUrl } from '../utils/config';
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class SignIn extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
-    axios.post('https://babynam.herokuapp.com/api/signin', params)
+    axios.post(baseUrl + '/api/signin', params)
       .then(
         response => {
           //console.log("response: " + response);

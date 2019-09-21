@@ -7,6 +7,7 @@ import NewListComponent from './NewListComponent';
 import Navbar from './Navbar';
 import EmptyList from './EmptyList';
 import { getUser } from '../utils/utils';
+import { baseUrl } from '../utils/config';
 
 
 class NewList extends Component {
@@ -64,7 +65,7 @@ class NewList extends Component {
       list: [...this.state.chosenNames]
     };
 
-    axios.post('http://localhost:3003/api/create', dataToSave)
+    axios.post(baseUrl + '/api/create', dataToSave)//('http://localhost:3003/api/create', dataToSave)
       .then(res => {
         this.setState({ error: "" });
         this.props.history.push('/lists');
