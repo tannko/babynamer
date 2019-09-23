@@ -10,6 +10,11 @@ class Navbar extends Component {
     this.state = {
       isOpen: false
     };
+    this.toggleCollapse = this.toggleCollapse.bind(this);
+  }
+
+  toggleCollapse = () => {
+    this.setState({ isOpen: !this.state.isOpen });
   }
 
   handleLogoutClick = () => {
@@ -27,7 +32,7 @@ class Navbar extends Component {
           <strong className="white-text">Babynamer</strong>
         </MDBNavbarBrand>
         <MDBNavbarToggler onClick={this.toggleCollapse} />
-        <MDBCollapse navbar>
+        <MDBCollapse id="main" isOpen={this.state.isOpen} navbar>
           <MDBNavbarNav left>
             <MDBNavItem name="home" className={homeClass} onClick={this.handleHomeClick}>
               <MDBNavLink to="/">Home</MDBNavLink>
