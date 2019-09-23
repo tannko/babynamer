@@ -60,16 +60,17 @@ class NameSorter extends React.Component {
     const nameForm = favourNames.size == 1 ? " name" : " names";
     const countNames = "You have " + favourNames.size + nameForm + " in your shortlist";
     const btnClass = names.length == 0 ? "disabled" : "";
+    const cardTextStyle = { height: '4rem' };
     return (
             <MDBCard>
               <MDBCardHeader className="d-flex align-items-center justify-content-end">
                 <MDBBtn className="mr-auto" onClick={this.props.startAgain}><MDBIcon icon="redo-alt"/></MDBBtn>
-                <div class="text-center">{this.state.error}</div>
+                <div className="text-center">{this.state.error}</div>
                 <MDBBtn onClick={this.saveClick}>SAVE</MDBBtn>
               </MDBCardHeader>
               <MDBCardBody className="text-center">
                 <MDBCardTitle>{name}</MDBCardTitle>
-                <MDBCardText>{meaning}</MDBCardText>
+                <div style={cardTextStyle}><MDBCardText>{meaning}</MDBCardText></div>
                 <MDBBtn className={btnClass} onClick={this.moveIndex}>NO</MDBBtn>
                 <MDBBtn className={btnClass} onClick={this.yesHandleClick}>YES</MDBBtn>
               </MDBCardBody>
