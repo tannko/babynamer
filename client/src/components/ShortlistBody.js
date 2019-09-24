@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactStarRatingComponent from 'react-star-rating-component';
 import ShortlistRow from './ShortlistRow';
-import { MDBTable } from 'mdbreact';
+import { MDBTable, MDBTableBody } from 'mdbreact';
 
 class ShortlistBody extends React.Component {
   constructor(props) {
@@ -18,14 +17,16 @@ class ShortlistBody extends React.Component {
   render() {
     const rows = [];
     this.props.list.forEach((rating, name) => {
-        rows.push(<ShortlistRow name={name}
+        rows.push(<ShortlistRow key={name} name={name}
                                 rating={rating}
                                 starClick={this.handleStarClick} />);
       });
 
     return(
       <MDBTable scrollY maxHeight="60vh" className="text-left">
-        {rows}
+        <MDBTableBody>
+          {rows}
+        </MDBTableBody>
       </MDBTable>
     );
   }

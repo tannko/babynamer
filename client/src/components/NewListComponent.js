@@ -1,11 +1,9 @@
 import React from 'react';
-import ShortlistRow from './ShortlistRow';
 import ShortlistBody from './ShortlistBody';
 import ErrorMessage from './ErrorMessage';
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
-import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
+import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle } from 'mdbreact';
+import { MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
 import { MDBTable, MDBInput } from 'mdbreact';
-import { socket } from '../utils/socket_api';
 
 class NewListComponent extends React.Component {
   constructor(props) {
@@ -64,6 +62,7 @@ class NewListComponent extends React.Component {
                     </div>
                   </MDBInput>
                 </MDBCardTitle>
+                <MDBCardText className="text-center">Now you can rate chosen names clicking on stars</MDBCardText>
                 <ShortlistBody list={this.props.list} updateRating={this.updateRating} />
                 <div className="d-flex justify-content-end">
                   <MDBBtn color="secondary" onClick={this.props.backToMenu}>Cancel</MDBBtn>

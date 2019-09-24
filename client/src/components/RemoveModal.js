@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer, MDBBtn } from 'mdbreact';
 import { MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } from 'mdbreact';
 
 class RemoveModal extends React.Component {

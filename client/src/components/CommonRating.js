@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ReactStarRatingComponent from 'react-star-rating-component';
-import { MDBTable } from 'mdbreact';
+import { MDBTable, MDBTableBody } from 'mdbreact';
 import { objectToMap } from '../utils/utils';
+import CommonRatingRow from './CommonRatingRow';
 
 class CommonRating extends Component {
   constructor(props) {
@@ -20,22 +20,14 @@ class CommonRating extends Component {
     const rows = [];
     sortedCommonList.forEach((rating, name) => {
       rows.push(
-        <tr>
-          <td>{name}</td>
-          <td>
-            <ReactStarRatingComponent
-                name={name}
-                starCount={10}
-                value={rating}
-                />
-          </td>
-          <td>({rating})</td>
-        </tr>
+        <CommonRatingRow key={name} name={name} rating={rating} />
       );
     });
     return (
       <MDBTable scrollY maxHeight="60vh" className="text-left">
-        {rows}
+        <MDBTableBody>
+          {rows}
+        </MDBTableBody>
       </MDBTable>
     );
   }

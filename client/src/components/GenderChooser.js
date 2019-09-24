@@ -1,6 +1,5 @@
 import React from 'react';
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
-import { MDBRow, MDBCol } from 'mdbreact';
+import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle } from 'mdbreact';
 
 function GenderChooser(props) {
   const welcomeText = 'I wanna find the best name for a';

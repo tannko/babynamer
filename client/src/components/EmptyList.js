@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBCard, MDBCardBody, MDBCardText, MDBBtn, MDBIcon, MDBTooltip } from 'mdbreact';
+import { MDBCard, MDBCardBody, MDBCardText, MDBBtn, MDBIcon } from 'mdbreact';
 
 function EmptyList(props) {
   return(

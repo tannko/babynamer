@@ -1,10 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { MDBContainer, MDBModal, MDBModalHeader, MDBModalBody, MDBModalFooter } from 'mdbreact';
-import { MDBCard, MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from 'mdbreact';
-import { MDBBtn, MDBRow, MDBIcon, MDBCardHeader, MDBBadge } from 'mdbreact';
-import { MDBDropdown, MDBDropdownMenu, MDBDropdownItem, MDBDropdownToggle } from 'mdbreact';
-import { MDBTabContent, MDBTabPane, MDBNav, MDBNavItem, MDBNavLink, MDBTooltip } from 'mdbreact';
+import { MDBBtn,  MDBBadge } from 'mdbreact';
+import { MDBTabContent, MDBTabPane, MDBNav, MDBNavItem, MDBNavLink } from 'mdbreact';
 import ShortlistBody from './ShortlistBody';
 import ShareModal from './ShareModal';
 import RenameModal from './RenameModal';

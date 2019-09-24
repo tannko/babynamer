@@ -44,7 +44,7 @@ class Menu extends React.Component {
             <MDBJumbotron>
               <h2 className="h1 display-3">Hello, {username}!</h2>
               <p className="lead">Welcome to BabyNamer! We are here to help you to find the best name for your little one.</p>
-                <div class="card-deck">
+                <div className="card-deck">
 
                   <MDBCol>
                     <MDBCard>

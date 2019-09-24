@@ -1,14 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBContainer } from 'mdbreact';
-import { MDBRow, MDBCol, MDBCardFooter, MDBCardText, MDBCardHeader } from 'mdbreact';
-import { MDBCardImage } from 'mdbreact';
+import { MDBCard, MDBCardBody, MDBContainer } from 'mdbreact';
+import { MDBRow, MDBCol } from 'mdbreact';
 import { getUser } from '../utils/utils';
 import ShortlistEditor from './ShortlistEditor';
 import Navbar from './Navbar';
 import ErrorMessage from './ErrorMessage';
-import { socket } from '../utils/socket_api';
 import { baseUrl } from '../utils/config';
+import InfoPanel from './InfoPanel';
 
 class MyLists extends React.Component {
   constructor(props) {
@@ -33,11 +32,7 @@ class MyLists extends React.Component {
   }
 
   render() {
-    const qty = this.state.lists.length;
     const rows = [];
-    const btnStyle = {
-      'border-radius' : '50%'
-    };
     const isError = this.state.error === "" ? false : true;
     this.state.lists.forEach( list => {
       rows.push(
@@ -50,6 +45,11 @@ class MyLists extends React.Component {
       <MDBContainer className="min-vh-100 align-items-center justify-content-center">
         <Navbar activeItem="lists"/>
         { isError && <div><ErrorMessage message={this.state.error}/></div> }
+        <MDBRow>
+          <MDBCol>
+            <InfoPanel />
+          </MDBCol>
+        </MDBRow>
         <MDBRow>
           <MDBCol>
             <MDBCard>

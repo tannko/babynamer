@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { getUser } from '../utils/utils';
-import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBBtn } from 'mdbreact';
-import { MDBCardFooter, MDBCardHeader, MDBCardImage } from 'mdbreact';
+import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody } from 'mdbreact';
+import { MDBCardHeader, } from 'mdbreact';
 import { MDBCollapseHeader, MDBCollapse, MDBIcon, MDBBadge } from 'mdbreact';
 import Invitation from './Invitation';
 import ShortlistEditor from './ShortlistEditor';
@@ -126,7 +126,7 @@ class SharedWithMe extends React.Component {
               </MDBCardHeader>
               <MDBCollapse id="invitations" isOpen={this.state.isInvitationsOpen}>
                 <MDBCardBody>
-                  <div class="card-deck">
+                  <div className="card-deck">
                     { invitationsQty == 0 ? <MDBCard className="text-center"><MDBCardBody>You have 0 invitations</MDBCardBody></MDBCard> : invitations }
                   </div>
                 </MDBCardBody>
@@ -139,7 +139,7 @@ class SharedWithMe extends React.Component {
             <MDBCard>
               <MDBCardHeader>Accepted for sharing</MDBCardHeader>
               <MDBCardBody>
-                <div class="card-deck">
+                <div className="card-deck">
                   {accepted}
                 </div>
               </MDBCardBody>
