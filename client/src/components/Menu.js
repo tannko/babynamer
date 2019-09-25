@@ -49,7 +49,7 @@ class Menu extends React.Component {
 
                     <MDBCard>
                       <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
-                      <MDBCardBody className="align-self-stretch">
+                      <MDBCardBody>
                         <MDBCardTitle>New List</MDBCardTitle>
                         <MDBCardText>Start name picking to find the best name for your baby! </MDBCardText>
                         <MDBBtn onClick={this.handleStartClick}>Start</MDBBtn>
