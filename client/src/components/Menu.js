@@ -32,6 +32,7 @@ class Menu extends React.Component {
 
   render() {
     const username = getUserName();
+
     return(
       <MDBContainer className="mt-5 text-center">
         <MDBRow>
@@ -46,38 +47,33 @@ class Menu extends React.Component {
               <p className="lead">Welcome to BabyNamer! We are here to help you to find the best name for your little one.</p>
                 <div className="card-deck">
 
-                  <MDBCol>
                     <MDBCard>
                       <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
-                      <MDBCardBody>
-                        <MDBCardTitle>Shared With Me</MDBCardTitle>
-                        <MDBCardText>Check invitations and help your partner with her shortlist rating</MDBCardText>
-                        <MDBBtn onClick={this.handleCheckClick}>Check</MDBBtn>
-                      </MDBCardBody>
-                    </MDBCard>
-                  </MDBCol>
-
-                  <MDBCol>
-                    <MDBCard>
-                      <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
-                      <MDBCardBody>
+                      <MDBCardBody className="align-self-stretch">
                         <MDBCardTitle>New List</MDBCardTitle>
                         <MDBCardText>Start name picking to find the best name for your baby! </MDBCardText>
                         <MDBBtn onClick={this.handleStartClick}>Start</MDBBtn>
                       </MDBCardBody>
                     </MDBCard>
-                  </MDBCol>
 
-                  <MDBCol>
                     <MDBCard>
                       <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
                       <MDBCardBody>
-                        <MDBCardTitle>My Shortlists</MDBCardTitle>
+                        <MDBCardTitle>My Lists</MDBCardTitle>
                         <MDBCardText>View, edit and share your shortlists with best names.</MDBCardText>
                         <MDBBtn onClick={this.handleViewClick}>View</MDBBtn>
                       </MDBCardBody>
                     </MDBCard>
-                  </MDBCol>
+
+                    <MDBCard>
+                      <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
+                      <MDBCardBody>
+                        <MDBCardTitle>Shared</MDBCardTitle>
+                        <MDBCardText>Check invitations and help your partner with her shortlist rating</MDBCardText>
+                        <MDBBtn onClick={this.handleCheckClick}>Check</MDBBtn>
+                      </MDBCardBody>
+                    </MDBCard>
+
                 </div>
             </MDBJumbotron>
           </MDBCol>

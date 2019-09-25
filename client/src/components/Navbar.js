@@ -41,10 +41,10 @@ class Navbar extends Component {
               <MDBNavLink to="/newlist">New List</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem name="lists" className={listsClass} onClick={this.handleListsClick}>
-              <MDBNavLink to="/lists">My Shorlists</MDBNavLink>
+              <MDBNavLink to="/lists">My Lists</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem name="shared" className={sharedClass} onClick={this.handleItemClick}>
-              <MDBNavLink to="/shared">Shared With Me</MDBNavLink>
+              <MDBNavLink to="/shared">Shared</MDBNavLink>
             </MDBNavItem>
           </MDBNavbarNav>
           <MDBNavbarNav right>
