@@ -3,6 +3,9 @@ import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle } from 'mdbrea
 import { MDBCardText, MDBCol, MDBRow, MDBContainer, MDBJumbotron } from 'mdbreact';
 import { getUserName, logout } from '../utils/utils';
 import Navbar from './Navbar';
+import newlistimg from '../images/newlist.jpg';
+import mylistsimg from '../images/namelist.jpg';
+import sharedimg from '../images/shared.jpg';
 
 class Menu extends React.Component {
   constructor(props) {
@@ -48,7 +51,7 @@ class Menu extends React.Component {
                 <div className="card-deck">
 
                     <MDBCard>
-                      <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
+                      <MDBCardImage className="img-fluid" src={newlistimg} waves />
                       <MDBCardBody>
                         <MDBCardTitle>New List</MDBCardTitle>
                         <MDBCardText>Start name picking to find the best name for your baby! </MDBCardText>
@@ -57,7 +60,7 @@ class Menu extends React.Component {
                     </MDBCard>
 
                     <MDBCard>
-                      <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
+                      <MDBCardImage className="img-fluid" src={mylistsimg} waves />
                       <MDBCardBody>
                         <MDBCardTitle>My Lists</MDBCardTitle>
                         <MDBCardText>View, edit and share your shortlists with best names.</MDBCardText>
@@ -66,7 +69,7 @@ class Menu extends React.Component {
                     </MDBCard>
 
                     <MDBCard>
-                      <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" waves />
+                      <MDBCardImage className="img-fluid" src={sharedimg} waves />
                       <MDBCardBody>
                         <MDBCardTitle>Shared</MDBCardTitle>
                         <MDBCardText>Check invitations and help your partner with her shortlist rating</MDBCardText>
