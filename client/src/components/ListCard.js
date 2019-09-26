@@ -1,6 +1,7 @@
 import React from 'react';
 import { MDBCard, MDBCardHeader, MDBBadge, MDBIcon } from 'mdbreact';
 import { MDBCardImage, MDBCardBody, MDBCardTitle, MDBCardText } from 'mdbreact';
+import listcardimg from '../images/listcardimg.jpg'
 
 function ListCard(props) {
   return (
@@ -30,7 +31,7 @@ function ListCard(props) {
         }
         </MDBCardHeader>
 
-        <MDBCardImage className="img-fluid" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"/>
+        <MDBCardImage className="img-fluid" src={listcardimg}/>
         <MDBCardBody>
           <MDBCardTitle>{props.name}</MDBCardTitle>
           <MDBCardText> has {props.size} names </MDBCardText>
