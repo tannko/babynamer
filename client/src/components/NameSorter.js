@@ -62,10 +62,10 @@ class NameSorter extends React.Component {
     const cardTextStyle = { height: '4rem' };
     return (
             <MDBCard>
-              <MDBCardHeader className="d-flex align-items-center justify-content-end">
+              <MDBCardHeader className="d-flex align-items-center">
                 <MDBBtn className="mr-auto" onClick={this.props.startAgain}><MDBIcon icon="redo-alt"/></MDBBtn>
-                <div className="text-center">{this.state.error}</div>
-                <MDBBtn onClick={this.saveClick}>SAVE</MDBBtn>
+                <div className="align-self-center text-center">{this.state.error}</div>
+                <MDBBtn className="ml-auto" onClick={this.saveClick}>SAVE</MDBBtn>
               </MDBCardHeader>
               <MDBCardBody className="text-center">
                 <MDBCardTitle>{name}</MDBCardTitle>
@@ -78,8 +78,6 @@ class NameSorter extends React.Component {
                 {countNames}
               </MDBCardFooter>
             </MDBCard>
-
-
     );
   }
 }
